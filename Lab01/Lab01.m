@@ -1,56 +1,69 @@
 % 1. Create a 5×5 matrix of ones (A).
-A = ones(5,5)
+A = ones(5,5);
 
 % 2. Create a 5×3 matrix of ones (B).
-B = ones(5,3)
+B = ones(5,3);
 
 % 3. Create a 3×3 matrix of zeros (C).
-C = zeros(3,3)
+C = zeros(3,3);
 
 % 4. Create a 4×4 matrix with equal row, column, and diagonal sums (D).
-D = magic(4)
+D = magic(4);
 
 % 5. Create a 4×4 random matrix whose values are uniformly distributed between 0 and 1 (E).
-E = rand(4,4)
+E = rand(4,4);
 
 % 6. Create a 5×5 identity matrix (F).
-F = eye(5) % Multiplicar una matriz por su inversa da como resultado la matriz identidad -> F = A*inv(A)
+F = eye(5); % Multiplicar una matriz por su inversa da como resultado la matriz identidad -> F = A*inv(A)
 
 % 7. Sum the matrices A and F.
-A + F;
+A + F
 
 % 8. Subtract the matrices A and F.
-A - F;
+A - F
 
 % 9. Sum the matrices A and C. Is it possible?.
 % Se haría así: A+C; pero no es posible ya que no son del mismo tamaño
 
 % 10. Compute D^20
-D.^20;
+D^20
 
 % 11. Compute F × 2.
+2*F
 
 % 12. Compute A × F.
+A*F
 
 % 13. Compute A × F, element by element.
+A.*F
 
 % 14. Compute the transpose matrix of E.
+E'
 
 % 15. Compute the inverse matrix of E.
+inv(E) % X^(-1)
 
 % 16. Compute the determinant of matrix C.
+det(C)
 
 % 17. Store the size of matrix B in two variables, rows and cols.
+[rows, cols] = size(B)
 
-% 18. Given the matrix F, obtain the linear indices of the elements whose value is not zero. Hint: f ind
+% 18. Given the matrix F, obtain the linear indices of the elements whose value is not zero. Hint: find
+indF = find(F)
 
 % 19. Set the detected values in the previous point to -1
+F(indF)=-1 
 
 % 20. Given those indices, transform them to subscripts (row and column).
+ind2sub(size(F),indF)
 
 % 21. Use those indices to set to -2 all positions in the matrix that are just above a value equal to -1 (except in row 1).
+F(indF>=-1)=-2
 
 % 22. Given a 10×10 matrix, set the values of the even columns to zero.
+G = ones(10);
+G(:, 2:2:end) = 0 %Todas las filas -> : // Columnas impares -> 2:2:end
 
 % 23. Create a 10×10 matrix where the values of each row coincide with the row number.
 
