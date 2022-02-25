@@ -70,26 +70,30 @@ G = ones(10);
 G(:, 2:2:end) = 0 %Todas las filas -> : // Columnas impares -> 2:2:end
 
 % 23. Create a 10×10 matrix where the values of each row coincide with the row number.
-size = 10;
-H = zeros(size);
+tam = 10;
+H = zeros(tam);
 
-for n = 1:size
-    H(n,:) = n*ones(1, size);
+for n = 1:tam
+    H(n,:) = n*ones(1, tam)
 end
-H
+
 
 % 24. Given a 10×10 matrix, set the values of the fourth row to zero.
-H(4,:) = zeros(1, size);
-H
+H(4,:) = zeros(1, tam)
+
 
 % 25. Given a 10×10 matrix, set the values of the second column to zero.
-H(2,:) = zeros(1, size);
+H(2,:) = zeros(1, tam);
 
 % 26. Given a 10×10 matrix, set the values of the fifth column to the values of the first column.
 H(1,:) = H(5,:);
 
 % 27. Given a 10×10 matrix, set all the values to zero, except the rows and columns in the edges of the matrix.
-I = ones(size);
+I = zeros(tam);
+I(1,:) = 1
+I(:,1) = 1
+I(tam,:) = 1
+I(:,tam) = 1
 
 %{
     Introduction to Image Processing Toolbox
@@ -118,3 +122,6 @@ imshow(grayImg)
 
 
 % 7. Write a Matlab script which flips the image moon.bmp vertically. Don t use nested loops. Use only subscripting. Have a look to functions like flipud or fliplr, but don’t use them this time. The final result should look like this:
+
+
+
