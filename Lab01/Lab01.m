@@ -81,7 +81,6 @@ end
 % 24. Given a 10×10 matrix, set the values of the fourth row to zero.
 H(4,:) = 0
 
-
 % 25. Given a 10×10 matrix, set the values of the second column to zero.
 H(2,:) = 0;
 
@@ -89,11 +88,8 @@ H(2,:) = 0;
 H(1,:) = H(5,:);
 
 % 27. Given a 10×10 matrix, set all the values to zero, except the rows and columns in the edges of the matrix.
-I = zeros(tam);
-I(1,:) = 1
-I(:,1) = 1
-I(tam,:) = 1
-I(:,tam) = 1
+I = ones(tam);
+I(2:tam-1,2:tam-1)=1
 
 %{
     Introduction to Image Processing Toolbox
@@ -116,14 +112,15 @@ normImage = mat2gray(grayImg);
 DP = im2double(normImage)
 
 % 4. Display the gray scale image as a three-dimensional plot. Compare the results using two functions: mesh and surf.
-
+surf(grayImg)
+mesh(grayImg)
 
 % 5. Convert the gray scale image to an indexed image with a colormap of 16 components and display the result. 
 % Do you observe differences between the original and the indexed images?
-
+[X, map]] = gray2ind(grayImg, 16)
 
 % 6. Write a Matlab script for generating the negative of the image moon.bmp. 
-% First of all do it using nested loops, and then using the matlab s ability to perform vectorized operations. The final results should look like this:
+% First of all do it using nested loops, and then using the matlabs ability to perform vectorized operations. The final results should look like this:
 
 
 % 7. Write a Matlab script which flips the image moon.bmp vertically. 
