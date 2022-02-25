@@ -74,16 +74,16 @@ tam = 10;
 H = zeros(tam);
 
 for n = 1:tam
-    H(n,:) = n*ones(1, tam)
+    H(n,:) = n
 end
 
 
 % 24. Given a 10×10 matrix, set the values of the fourth row to zero.
-H(4,:) = zeros(1, tam)
+H(4,:) = 0
 
 
 % 25. Given a 10×10 matrix, set the values of the second column to zero.
-H(2,:) = zeros(1, tam);
+H(2,:) = 0;
 
 % 26. Given a 10×10 matrix, set the values of the fifth column to the values of the first column.
 H(1,:) = H(5,:);
@@ -105,9 +105,11 @@ imshow(Img)
 imfinfo("landscape.jpg")
 % The size of the image is 640*480, and its colortype is truecolor
 
-% 2. Convert the image to grayscale, and display the result. Then, save this resulting image into another file called landscapegray.jpg. What is the data type of the pixels?
+% 2. Convert the image to grayscale, and display the result. 
+% Then, save this resulting image into another file called landscapegray.jpg. What is the data type of the pixels?
 grayImg = rgb2gray(Img);
 imshow(grayImg)
+Image.save(landscapegray.jpg)
 
 % 3. Rescale the pixel values to the range [0, 1] and convert the image to double precision.
 normImage = mat2gray(grayImg);
@@ -116,13 +118,16 @@ DP = im2double(normImage)
 % 4. Display the gray scale image as a three-dimensional plot. Compare the results using two functions: mesh and surf.
 
 
-% 5. Convert the gray scale image to an indexed image with a colormap of 16 components and display the result. Do you observe differences between the original and the indexed images?
+% 5. Convert the gray scale image to an indexed image with a colormap of 16 components and display the result. 
+% Do you observe differences between the original and the indexed images?
 
 
-% 6. Write a Matlab script for generating the negative of the image moon.bmp. First of all do it using nested loops, and then using the matlab s ability to perform vectorized operations. The final results should look like this:
+% 6. Write a Matlab script for generating the negative of the image moon.bmp. 
+% First of all do it using nested loops, and then using the matlab s ability to perform vectorized operations. The final results should look like this:
 
 
-% 7. Write a Matlab script which flips the image moon.bmp vertically. Don t use nested loops. Use only subscripting. Have a look to functions like flipud or fliplr, but don’t use them this time. The final result should look like this:
+% 7. Write a Matlab script which flips the image moon.bmp vertically. 
+% Don t use nested loops. Use only subscripting. Have a look to functions like flipud or fliplr, but don’t use them this time. The final result should look like this:
 
 
 
