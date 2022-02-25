@@ -106,7 +106,8 @@ grayImg = rgb2gray(Img);
 imshow(grayImg)
 
 % 3. Rescale the pixel values to the range [0, 1] and convert the image to double precision.
-
+normImage = mat2gray(grayImg);
+DP = im2double(normImage)
 
 % 4. Display the gray scale image as a three-dimensional plot. Compare the results using two functions: mesh and surf.
 
