@@ -96,10 +96,14 @@ I = ones(size);
 %}
 
 % 1. Open and display the image landscape.jpg. Determine the dimensions of the image. Is this a color image?
-
+Img = imread("landscape.jpg");
+imshow(Img)
+imfinfo("landscape.jpg")
+% The size of the image is 640*480, and its colortype is truecolor
 
 % 2. Convert the image to grayscale, and display the result. Then, save this resulting image into another file called landscapegray.jpg. What is the data type of the pixels?
-
+grayImg = rgb2gray(Img);
+imshow(grayImg)
 
 % 3. Rescale the pixel values to the range [0, 1] and convert the image to double precision.
 
