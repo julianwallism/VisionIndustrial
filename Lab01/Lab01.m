@@ -66,11 +66,23 @@ G = ones(10);
 G(:, 2:2:end) = 0 %Todas las filas -> : // Columnas impares -> 2:2:end
 
 % 23. Create a 10×10 matrix where the values of each row coincide with the row number.
+size = 10;
+H = zeros(size);
+
+for n = 1:size
+    H(n,:) = n*ones(1, size);
+end
+H
 
 % 24. Given a 10×10 matrix, set the values of the fourth row to zero.
+H(4,:) = zeros(1, size);
+H
 
 % 25. Given a 10×10 matrix, set the values of the second column to zero.
+H(2,:) = zeros(1, size);
 
 % 26. Given a 10×10 matrix, set the values of the fifth column to the values of the first column.
+H(1,:) = H(5,:);
 
 % 27. Given a 10×10 matrix, set all the values to zero, except the rows and columns in the edges of the matrix.
+I = ones(size);
