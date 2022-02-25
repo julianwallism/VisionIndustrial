@@ -1,3 +1,7 @@
+%{
+    Matrices and Matlab
+%}
+
 % 1. Create a 5×5 matrix of ones (A).
 A = ones(5,5);
 
@@ -86,3 +90,27 @@ H(1,:) = H(5,:);
 
 % 27. Given a 10×10 matrix, set all the values to zero, except the rows and columns in the edges of the matrix.
 I = ones(size);
+
+%{
+    Introduction to Image Processing Toolbox
+%}
+
+% 1. Open and display the image landscape.jpg. Determine the dimensions of the image. Is this a color image?
+
+
+% 2. Convert the image to grayscale, and display the result. Then, save this resulting image into another file called landscapegray.jpg. What is the data type of the pixels?
+
+
+% 3. Rescale the pixel values to the range [0, 1] and convert the image to double precision.
+
+
+% 4. Display the gray scale image as a three-dimensional plot. Compare the results using two functions: mesh and surf.
+
+
+% 5. Convert the gray scale image to an indexed image with a colormap of 16 components and display the result. Do you observe differences between the original and the indexed images?
+
+
+% 6. Write a Matlab script for generating the negative of the image moon.bmp. First of all do it using nested loops, and then using the matlab s ability to perform vectorized operations. The final results should look like this:
+
+
+% 7. Write a Matlab script which flips the image moon.bmp vertically. Don t use nested loops. Use only subscripting. Have a look to functions like flipud or fliplr, but don’t use them this time. The final result should look like this:
