@@ -109,14 +109,8 @@ subplot(3,2,6), imhist(C_64), title('Hist 64');
 % tenemos que quedarnos con uno. 
 % Haremos una iteración de como lo debe hacer matlab con las imágenes del
 % ejercicio 2:
-% Para las dos primeras filas tendremos los siguientes "cuadrantes": [0,0,1,1]
-% Hace la media -> 0.5 y redondea a 1
-% Para la tercera y cuarta fila tendremos [2,2,3,3], media -> 2.5 redondea
-% a 3
-% ...
-% Cuando acaba con toda la imagen nos queda una nueva imagen de 128*128
-% píxeles, con un histograma que da "saltos" de dos en dos.
-
+% Primer quadrante: [0,0,1,1], hace la media -> 0.5 redondea a 1,
+% Para el resto de cuadrantes de la primera fila da el m
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 7. Write a function in Matlab to reduce images of size 256×256 to 128×128.
