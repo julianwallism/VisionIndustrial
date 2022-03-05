@@ -139,7 +139,7 @@ I(2:tam-1,2:tam-1)=1;
 Img = imread("landscape.jpg");
 
 figure('Name','Landscape');
-subplot(1,2,1), imshow(Img), title('landscape.jpg');
+subplot(1,3,1), imshow(Img), title('landscape.jpg');
 
 imfinfo("landscape.jpg");
 % El tamaño de la imagen es 640*480, y el colortype es truecolor
@@ -212,8 +212,8 @@ end
 
 figure('Name','Moon');
 subplot(1,4,1), imshow(moon), title('Moon');
-subplot(1,4,2), imshow(negMoon), title('Nested loops');
-subplot(1,4,3), imshow(negMoon), title('Vectorized operations');
+subplot(1,4,2), imshow(negMoon), title('Neg. Moon with nested loops');
+subplot(1,4,3), imshow(negMoon), title('Neg. Moon with vectorized operations');
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 7. Write a Matlab script which flips the image moon.bmp vertically. 
