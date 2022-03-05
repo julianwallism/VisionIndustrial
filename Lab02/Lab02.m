@@ -35,7 +35,7 @@ Red(:,:,1)= 255;
 Green(:,:,2)= 255;
 Blue(:,:,3)= 255;
 
-figure(3); 
+figure('Name','RGB');
 subplot(1,3,1), imshow(Red);
 subplot(1,3,2), imshow(Green);
 subplot(1,3,3), imshow(Blue);
@@ -55,12 +55,12 @@ subplot(1,3,3), imshow(Blue);
 % 5. Using the function implemented in the previous point, compute the 
 % histogram of the images of the exercise 2, and plot the results. 
 % Are the histograms the same?
-figure(4);
 
 h_c = histogram(C);
 h_d = histogram(D);
 
-subplot(1,2,1), bar(h_c), title('F');
+figure('Name','Histogramas');
+subplot(1,2,1), bar(h_c), title('C');
 subplot(1,2,2), bar(h_d), title('D');
 
 
@@ -76,12 +76,13 @@ subplot(1,2,2), bar(h_d), title('D');
 % using the corresponding Matlab% function. Plot each resulting image and 
 % its corresponding histogram in figures. Given these histograms, what
 % can we say about the resizing process in Matlab?
-figure(5);
+
 
 C_512 = imresize(C,[512,512]);
 C_128 = imresize(C,[128,128]);
 C_64 = imresize(C,[64,64]);
 
+figure('Name', 'Resize Matlab');
 subplot(3,2,1), imshow(C_512), title('512');
 subplot(3,2,2), imhist(C_512), title('Hist 512');
 
@@ -135,7 +136,7 @@ subplot(3,2,6), imhist(C_64), title('Hist 64');
 C_propia = uint8(halfsize(C));
 D_propia = uint8(halfsize(D));
 
-figure(6);
+figure('Name', 'Halfsize');
 subplot(1,2,1), imshow(C_propia), title('C propia');
 subplot(1,2,2), imshow(D_propia), title('D propia');
 
