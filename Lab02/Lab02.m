@@ -1,3 +1,8 @@
+%%%%%%%%%%%%%%%%%
+%%    LAB 02   %%
+%%%%%%%%%%%%%%%%%
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 1. Generate the following binary images of size 256×256 and display the results:
 % Note: The images should be defined using the logical data type.
@@ -141,7 +146,7 @@ subplot(1,2,1), imshow(C_propia), title('C propia');
 subplot(1,2,2), imshow(D_propia), title('D propia');
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%% FUNCIONES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% FUNCIONES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%% Ejercicio 4 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Para cada valor de intensidad hacemos una búsqueda mediante la función
