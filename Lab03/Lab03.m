@@ -1,6 +1,7 @@
 %%%%%%%%%%%%%%%%%
 %%    LAB 03   %%
 %%%%%%%%%%%%%%%%%
+close all
 
 %% Histogram Stretching
 
@@ -41,7 +42,7 @@ subplot(3,2,6), imhist(white), title('Hist white');
 
 low_norm = rescale(low);
 black_norm =rescale(black);
-white_norm = rescale(white)
+white_norm = rescale(white);
 
 low_adjust = adjust(low_norm);
 black_adjust = adjust(black_norm);
@@ -116,7 +117,7 @@ subplot(3,2,6), imhist(white_adjust_neg), title('hist white adjust');
 % where hnorm is the normalized histogram of an image and cdf is the 
 % resulting cumulative sum.
 
-
+a = normalize(low)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 2. Write a function in Matlab to equalize an image using a uniform 
@@ -130,10 +131,22 @@ subplot(3,2,6), imhist(white_adjust_neg), title('hist white adjust');
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 3. Equalize the images pollenlow.jpg, pollenblack.jpg, pollenwhite.jpg 
-% using the function written in the previous point. Display each resulting
+% using the function written in the previous point. Display each resulting
 % image and its corresponding histogram in figures.
 
+low_eq = equalize(low);
+black_eq = equalize(black);
+white_eq = equalize(white);
 
+figure('Name', 'Equalized');
+subplot(3,2,1), imshow(low_eq), title('low equalized');
+subplot(3,2,2), imhist(low_eq), title('hist low equalized');
+
+subplot(3,2,3), imshow(black_eq), title('black equalized');
+subplot(3,2,4), imhist(black_eq), title('hist black equalized');
+
+subplot(3,2,5), imshow(white_eq), title('white equalized');
+subplot(3,2,6), imhist(white_eq), title('hist white equalized');
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 4. Equalize the images pollenlow.jpg, pollenblack.jpg, pollenwhite.jpg 
@@ -141,6 +154,19 @@ subplot(3,2,6), imhist(white_adjust_neg), title('hist white adjust');
 % their histograms, and compare the results with the histograms computed in 
 % the previous exercise.
 
+low_eq_m = histeq(low);
+black_eq_m = histeq(black);
+white_eq_m = histeq(white);
+
+figure('Name', 'Matlab equalized');
+subplot(3,2,1), imshow(low_eq_m), title('low equalized');
+subplot(3,2,2), imhist(low_eq_m), title('hist low equalized');
+
+subplot(3,2,3), imshow(black_eq_m), title('black equalized');
+subplot(3,2,4), imhist(black_eq_m), title('hist black equalized');
+
+subplot(3,2,5), imshow(white_eq_m), title('white equalized');
+subplot(3,2,6), imhist(white_eq_m), title('hist white equalized');
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 5. Compare the results obtained with histogram stretching and equalization 
@@ -162,10 +188,14 @@ subplot(3,2,6), imhist(white_adjust_neg), title('hist white adjust');
 
 function imadj = adjust(image)
    imadj = zeros(size(image));
-   I_min = min(min(image))
-   I_max = max(max(image))
-   O_min=0;
-   O_max=1;
+   I_min = min(min(image));
+   I_max = max(max(image));
+%    [O_min,O_max]=stretchlim(image);
+   valores = stretchlim(image);
+   O_min=valores(1);
+   O_max=valores(2);
+%    O_min=0;
+%    O_max=1;
    for i = 1:length(image);
        for j = 1:length(image);
            imadj(i,j)=(O_max-O_min)*((image(i,j)-I_min)/(I_max-I_min))+O_min;
@@ -175,13 +205,33 @@ end
 
 %%%%% Ejercicio HE.1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function cdf = csum(image)
-   
+function cdf = csum(hnorm)
+   L=sum(find(hnorm));
+   sum=0;
+   for j = 0:k
+       sum = sum + hnorm(j);
+   end
+   cdf=(L-1)*sum;
 end
 
 %%%%% Ejercicio HE.2 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function imageeq = equalize(image)
    
+end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%% Auxiliar %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+function histnorm = normalize(image)
+   hist = imhist(image);
+   [N,M]=size(image)
+   histnorm = zeros(1, length(hist));
+  % L = find(hist);
+   for i = 1:256
+       if hist(i)~=0
+         histnorm(i)=hist(i)/(N*M);
+       end
+   end
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
