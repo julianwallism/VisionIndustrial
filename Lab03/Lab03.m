@@ -62,6 +62,11 @@ subplot(3,2,6), imhist(white_adjust), title('hist white adjust');
 % Are these histograms the same as the ones obtained in the previous 
 % exercise? Why?
 
+figure('Name', 'Matlab Adjust');
+subplot(3,1,1), imadjust(low), title('low adjust');
+subplot(3,1,2), imadjust(black), title('black adjust');
+subplot(3,1,3), imadjust(white), title('white adjust');
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -134,7 +139,7 @@ subplot(3,2,6), imhist(white_adjust), title('hist white adjust');
 
 function imadj = adjust(image)
    imadj = zeros(size(image));
-   I_min= min(min(image))
+   I_min = min(min(image))
    I_max = max(max(image))
    O_min=0;
    O_max=1;
