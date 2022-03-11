@@ -185,17 +185,24 @@ subplot(3,2,6), imhist(white_eq_m), title('hist white equalized');
 % especificado. Luego los "tiles" se combinan mediante la interpolación
 % bilineal para eliminar los límmites inducidos artificialmente.
 
-adapthisteq(low, "NumTiles", [8,8]);
+low_adapt8 = adapthisteq(low, "NumTiles", [8,8]);
+low_adapt16 = adapthisteq(low, "NumTiles", [16,16]);
+
+black_adapt8 = adapthisteq(black, "NumTiles", [8,8]);
+black_adapt16 = adapthisteq(black, "NumTiles", [16,16]);
+
+white_adapt8 = adapthisteq(white, "NumTiles", [8,8]);
+white_adapt16 = adapthisteq(white, "NumTiles", [16,16]);
 
 figure('Name', 'Adapthiseq');
-subplot(3,2,1), imshow(low_eq_m), title('NumTiles = ');
-subplot(3,2,2), imhist(low_eq_m), title('NumTiles = ');
+subplot(3,2,1), imshow(low_adapt8), title('NumTiles = 8*8');
+subplot(3,2,2), imhist(low_eq_m), title('NumTiles = 16*16');
 
-subplot(3,2,3), imshow(black_eq_m), title('NumTiles = ');
-subplot(3,2,4), imhist(black_eq_m), title('NumTiles = ');
+subplot(3,2,3), imshow(black_eq_m), title('NumTiles = 8*8');
+subplot(3,2,4), imhist(black_eq_m), title('NumTiles = 16*16');
 
-subplot(3,2,5), imshow(white_eq_m), title('NumTiles = ');
-subplot(3,2,6), imhist(white_eq_m), title('NumTiles = ');
+subplot(3,2,5), imshow(white_eq_m), title('NumTiles = 8*8');
+subplot(3,2,6), imhist(white_eq_m), title('NumTiles = 16*16');
 
 
 
