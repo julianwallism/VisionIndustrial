@@ -185,7 +185,7 @@ subplot(3,2,6), imhist(white_eq_m), title('hist white equalized');
 % especificado. Luego los "tiles" se combinan mediante la interpolación
 % bilineal para eliminar los límmites inducidos artificialmente.
 
-adapthisteq(low, "NumTiles", [8,8]);
+adapthisteq(low, "NumTiles", )
 
 figure('Name', 'Adapthiseq');
 subplot(3,2,1), imshow(low_eq_m), title('NumTiles = ');
