@@ -269,26 +269,14 @@ end
 %%%%% Ejercicio HE.2 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function imageeq = equalize(image)
-   imageeq = zeros(size(image));
-   hnorm = normalize(image);
+   imageeq = zeros(size(image),"uint8");
+   hnorm = imhist(image)/numel(image);
    cdf = csum(hnorm);
-   newHist = 255*cdf;
-   for gray_level = 1:256      
-       imageeq(image==gray_level)=uint8(newHist(gray_level));
-   end
-end
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%% Auxiliar %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-function histnorm = normalize(image)
-   hist = imhist(image);
-   [N,M]=size(image);
-   histnorm = zeros(1, length(hist));
-   for i = 1:256
-       if hist(i)~=0
-         histnorm(i)=hist(i)/(N*M);
-       end
-   end
+  newHist = 255*cdf;
+  for i = 1:size(image)
+      for j = 1:size(image)
+          imageeq(i,j) = uint8(round(newHist(image(i,j)+1)));
+      end
+  end
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
