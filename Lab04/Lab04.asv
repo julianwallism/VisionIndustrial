@@ -16,8 +16,6 @@ close all
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 2. Open the image light.tif and convert it to [0.0, 1.0].
-Img = imread("light.tif");
-normImage = mat2gray(Img);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 3. Apply the logtrans function to this image.
@@ -44,11 +42,6 @@ normImage = mat2gray(Img);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 2. Display the image spine.jpg and its histogram.
-Img2 = imread("spine.jpg");
-h_Img2 = histogram(Img2);
-
-figure('Name', 'Spine');
-subplot(1,2,1);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 3. If a lighter image is wanted, which values of γ do we need to use: 
