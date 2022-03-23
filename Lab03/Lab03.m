@@ -202,9 +202,45 @@ subplot(3,2,4), imhist(black_eq_m), title('hist black equalized');
 subplot(3,2,5), imshow(white_eq_m), title('white equalized');
 subplot(3,2,6), imhist(white_eq_m), title('hist white equalized');
 
+% Como podemos observar obtenemos un resultado bastante similar, siendo la
+% imagen blanca en la que hay mayores diferencias. Estas diferencias
+% principalemte son que en el histograma de nuestra función hay mayor
+% cantidad de niveles de grises, como podemos ver si ejecutamos el
+% siguiente código
+% num = unique(white_eq)
+% num = unique(white_eq_m)
+% Con el nuestro tenemos 125 valores de grises y con el de matlab 57, esto
+% hace que la cantidad de píxeles por valor de gris sea menor con nuestra
+% función.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 5. Compare the results obtained with histogram stretching and equalization 
 % and explain briefly the main differences between both approaches.
+
+
+% Podemos ver en los histogramas resultantes que al usar el estiramiento de
+% histograma este mantiene su forma, pero al usar la ecualización la
+% pierde.
+
+% Como ya sabemos el "histogram stretching" y el "histogram equalization"
+% son técnicas de mejora de imagenes que aumentan el contraste de las 
+% imágenes.
+% El histogram stretching consiste en aumentar la diferencia entre el valor
+% de intensidad menor y el mayor repartiendo las demás intensidades en ese 
+% rango, es decir aumentamos el contraste.
+% Por el otro lado el "histogram equalization" consiste en modificar las
+% intensidades de los pixeles de tal forma que el histograma quede lo más
+% "plano" posible.
+% Otra diferencia que cabe destacar es que con el stretching podemos hacer
+% el proceso inverso para obtener la imagen original pero con el
+% equalization no
+
+% Una idea interesante sería unir las dos técnicas. De hacerlo primero
+% deberíamos hacer el estiramiento de histograma y luego la ecualización.
+% Con las funciones de MatLab el código sería el siguiente:
+% histeq(imadjust(low));
+% Con nuestras funciones sería así:
+% equalize(adjust(low));
 
 
 
@@ -217,7 +253,7 @@ subplot(3,2,6), imhist(white_eq_m), title('hist white equalized');
 % "tiles", en vez de trabajar sobre la imagen completa. Esto se hace de
 % manera que la región de salida coincida aproximadamente con el histograma
 % especificado. Luego los "tiles" se combinan mediante la interpolación
-% bilineal para eliminar los límmites inducidos artificialmente.
+% bilineal para eliminar los límites inducidos artificialmente.
 
 low_adapt8 = adapthisteq(low, "NumTiles", [8,8]);
 low_adapt16 = adapthisteq(low, "NumTiles", [16,16]);
@@ -241,9 +277,7 @@ subplot(3,2,6), imhist(white_eq_m), title('NumTiles = 16*16');
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% FUNCIONES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%%%% Ejercicio HS.1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% HAY QUE USAR STRETCHLIM? O_MIN Y O_MAX QUE VALORES TENDRIAN QUE TENER?
-%% EL OUTPUT TIENE QUE ESTAR DE 0 A 1 O DE 1 A 256?
+%%%%% Ejercicio HS.1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function imadj = adjust(image)
    imadj = zeros(size(image));
    I_min = min(min(image));
