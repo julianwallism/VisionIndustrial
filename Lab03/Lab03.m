@@ -5,8 +5,7 @@ close all
 
 %% Histogram Stretching
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-%% QUE QUIERE QUE DIGAMOS SOBRE EL CONTRASTE?
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 1. Display the images pollenlow.jpg, pollenblack.jpg, pollenwhite.jpg 
 % along with their corresponding histograms using the imhist function. 
 % What can you say about the contrast of each of these images?
@@ -42,12 +41,11 @@ subplot(3,2,6), imhist(white), title('Hist white');
 
 % final del archivo
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 3. Using the function created in the previous point, adjust the contrast 
 % of the three images of exercise 1 and display the resulting images along 
 % with their corresponding histograms. Compare the histograms of the 
 % adjusted images with the original ones.
-%% QUE ES MEJOR HACER REESCALE O DIVIDIR ENTRE 256
 low_norm = rescale(low);
 black_norm = rescale(black);
 white_norm = rescale(white);
@@ -73,15 +71,15 @@ subplot(3,3,9), imhist(white), title('Hist white');
 % misma forma, lo que en el histograma ajustado los valores van de 0 a 1.
 % Es decir, hemos aumentado el contraste.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 4. Apply the function provided by Matlab for adjusting the contrast of 
 % the three images, and display the resulting images with their histograms
 % Are these histograms the same as the ones obtained in the previous 
 % exercise? Why?
-%% HAY QUE PASARLA REESCALADA?
-low_adjust_m = imadjust(low);
-black_adjust_m = imadjust(black);
-white_adjust_m = imadjust(white);
+
+low_adjust_m = imadjust(low_norm);
+black_adjust_m = imadjust(black_norm);
+white_adjust_m = imadjust(white_norm);
 
 figure('Name', 'Matlab Adjust');
 subplot(3,2,1), imshow(low_adjust_m), title('low adjust');
@@ -93,9 +91,11 @@ subplot(3,2,4), imhist(black_adjust_m), title('hist black adjust');
 subplot(3,2,5), imshow(white_adjust_m), title('white adjust');
 subplot(3,2,6), imhist(white_adjust_m), title('hist white adjust');
 
-% Sí que son iguales, la única diferencia que podemos observar es que el
-% nuestro los valores van de 0 a 1 mientras que el histograma de la función
-% de MatLab van de 0 a 255
+% No quedan iguales ya que matlab condensa los valores por debajo del 1% y
+% los que estan por encima del 99% mientras que nosotros no. Si quiséramos
+% que lo hiciese podríamos usar la función stretchlim para conseguir los
+% valores I_min e I_max. 
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 5. Would it be possible to use the Matlab’s contrast adjusting function 
@@ -121,7 +121,24 @@ subplot(3,2,6), imhist(white_adjust_neg), title('Hist white adjust');
 % one obtained with your function and the adjusted one using the Matlabs 
 % function, which one would you use for a further processing step? Why?
 
-%% BRU
+% De primeras podemos descartar la imagen original, tiene un contraste muy
+% bajo y visualmente no aporta mucha información.
+
+% Tenemos que decidir entre la imagen de nuestra función y la de MatLab.
+% Aunque nuestra función retorna una imagen más realista, ya que no hacemos
+% niguna saturación de los extremos, puede haber algún caso en el que el 
+% hecho de no hacer la saturación nos perjudique. Por ejemplo si tenemos
+% una imagen que todos los píxeles están entre 90 y 100 pero justamente
+% tenemos un píxel de valor 0 y otro de valor 255 no haría ningun
+% "histogram stretching"
+
+% Así pues, nosotros elegiríamos la función de MatLab, ya que hace más
+% visibles los rangos centrals a costa de perder sensibilidad, ya que
+% satura los valores extremos. 
+% Si trabajasemos con una aplicación que únicamente necesita información 
+% fiable de los extremos, sería buena idea usar nuestra función. Pero como
+% será el caso mayoritario nosotros escogemos la función de MatLab
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -134,8 +151,7 @@ subplot(3,2,6), imhist(white_adjust_neg), title('Hist white adjust');
 % where hnorm is the normalized histogram of an image and cdf is the 
 % resulting cumulative sum.
 
-a = normalize(low)
-cdf = csum(a)
+% Mirar final del archivo
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 2. Write a function in Matlab to equalize an image using a uniform 
@@ -145,7 +161,7 @@ cdf = csum(a)
 % image. This function must use the csum function implemented in the 
 % previous exercise
 
-
+% Mirar final del archivo
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 3. Equalize the images pollenlow.jpg, pollenblack.jpg, pollenwhite.jpg 
@@ -208,23 +224,6 @@ low_adapt16 = adapthisteq(low, "NumTiles", [16,16]);
 
 black_adapt8 = adapthisteq(black, "NumTiles", [8,8]);
 black_adapt16 = adapthisteq(black, "NumTiles", [16,16]);
-<<<<<<< Updated upstream
-
-white_adapt8 = adapthisteq(white, "NumTiles", [8,8]);
-white_adapt16 = adapthisteq(white, "NumTiles", [16,16]);
-
-figure('Name', 'Adapthiseq');
-subplot(3,2,1), imshow(low_adapt8), title('NumTiles = 8*8');
-subplot(3,2,2), imhist(low_eq_m), title('NumTiles = 16*16');
-
-subplot(3,2,3), imshow(black_eq_m), title('NumTiles = 8*8');
-subplot(3,2,4), imhist(black_eq_m), title('NumTiles = 16*16');
-
-subplot(3,2,5), imshow(white_eq_m), title('NumTiles = 8*8');
-subplot(3,2,6), imhist(white_eq_m), title('NumTiles = 16*16');
-
-=======
->>>>>>> Stashed changes
 
 white_adapt8 = adapthisteq(white, "NumTiles", [8,8]);
 white_adapt16 = adapthisteq(white, "NumTiles", [16,16]);
@@ -247,12 +246,8 @@ subplot(3,2,6), imhist(white_eq_m), title('NumTiles = 16*16');
 %% EL OUTPUT TIENE QUE ESTAR DE 0 A 1 O DE 1 A 256?
 function imadj = adjust(image)
    imadj = zeros(size(image));
-%    I_min = min(min(image));
-%    I_max = max(max(image));
-%    [I_min, I_max]=stretchlim(image);
-   valores = stretchlim(image);
-   I_min=valores(1);
-   I_max=valores(2);
+   I_min = min(min(image));
+   I_max = max(max(image));
    O_min=0;
    O_max=1;
    for i = 1:length(image);
@@ -265,32 +260,23 @@ end
 %%%%% Ejercicio HE.1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function cdf = csum(hnorm)
-   L=size(find(hnorm~=0));
-   sum=0;
-   for j = 0:k
-       sum = sum + hnorm(j);
+   cdf=zeros(1,length(hnorm));
+   for k = 1:256
+       cdf(k)=sum(hnorm(1:k));
    end
-   cdf=(L-1)*sum;
 end
 
 %%%%% Ejercicio HE.2 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function imageeq = equalize(image)
-   
-end
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%% Auxiliar %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-function histnorm = normalize(image)
-   hist = imhist(image);
-   [N,M]=size(image);
-   histnorm = zeros(1, length(hist));
-  % L = find(hist);
-   for i = 1:256
-       if hist(i)~=0
-         histnorm(i)=hist(i)/(N*M);
-       end
-   end
+   imageeq = zeros(size(image),"uint8");
+   hnorm = imhist(image)/numel(image);
+   cdf = csum(hnorm);
+  newHist = 255*cdf;
+  for i = 1:size(image)
+      for j = 1:size(image)
+          imageeq(i,j) = uint8(round(newHist(image(i,j)+1)));
+      end
+  end
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
