@@ -31,7 +31,7 @@ E = rand(4);
 % 6. Create a 5×5 identity matrix (F).
 F = eye(5); 
 % Otra manera de hacerlo sería multiplicando una matriz por su inversa 
-% F = A*inv(A)
+% F = A*inv(A).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 7. Sum the matrices A and F.
@@ -43,7 +43,7 @@ A - F;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 9. Sum the matrices A and C. Is it possible?.
-% Se haría así: A+C; pero no es posible ya que no son del mismo tamaño
+% Se haría así: A+C; pero no es posible ya que no son del mismo tamaño.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 10. Compute D^20
@@ -117,8 +117,8 @@ H(4,:) = 0;
 H(2,:) = 0;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 26. Given a 10×10 matrix, set the values of the fifth column to the values
-% of the first column.
+% 26. Given a 10×10 matrix, set the values of the fifth column to the 
+% values of the first column.
 H(1,:) = H(5,:);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -141,8 +141,9 @@ Img = imread("landscape.jpg");
 figure('Name','Landscape');
 subplot(1,2,1), imshow(Img), title('landscape.jpg');
 
-imfinfo("landscape.jpg");
-% El tamaño de la imagen es 640*480, y el colortype es truecolor
+imfinfo("landscape.jpg")
+% El tamaño de la imagen es 640*480, y el colortype es truecolor, por lo 
+% que es RGB.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 2. Convert the image to grayscale, and display the result. 
@@ -186,7 +187,7 @@ imshow(X, map), title('indexed image');
 % ya que pasamos de tener 256 posibilidades de intensidad a tan solo 16.
 % Esto produce que el cambio entre diferentes colores se vea más brusco.
 % Además si hacemos mucho zoom en una zona, podemos ver que se han perdido
-% detalles
+% detalles.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 6. Write a Matlab script for generating the negative of the image moon.bmp. 

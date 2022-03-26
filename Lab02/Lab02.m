@@ -85,7 +85,6 @@ subplot(1,2,2), bar(h_d), title('D');
 % its corresponding histogram in figures. Given these histograms, what
 % can we say about the resizing process in Matlab?
 
-
 C_512 = imresize(C,[512,512]);
 C_128 = imresize(C,[128,128]);
 C_64 = imresize(C,[64,64]);
@@ -169,11 +168,11 @@ subplot(1,2,2), imshow(D_propia), title('D propia');
 % problema:
 % Para indexar el histograma mediante la intensidad del pixel image(i,j)
 % tenemos que sumarle 1 a la intensidad (ya que los vectores en Matlab
-% empiezan por 1, pero las intensidades van de 0 a 255) Así pues, al hacer
+% empiezan por 1, pero las intensidades van de 0 a 255). Así pues, al hacer
 % esta operación estamos sumando un uint8 con un double lo que resulta en
 % un uint8. Al llegar a la última fila de la imagen nos encontramos con que
 % los valores son 255 y al sumarle 1 produce un overflow ya que en uint8 no
-% se puede representar el 256 así que lo deja como 255 
+% se puede representar el 256 así que lo deja como 255. 
 % Este error hacía que el histograma tuviese el doble de píxeles en el
 % valor 255 y niguno en el 256
 % Esto que acabamos de explicar se puede comprobar fácilmente ejecutando
@@ -183,7 +182,7 @@ subplot(1,2,2), imshow(D_propia), title('D propia');
 % C(256,256)+1
 % C(256,256)+99999
 % Como vemos C(256,256) vale 255, es un uint8 y cuando le sumamos cualquier
-% valor se mantiene en 255
+% valor se mantiene en 255.
 
 function h = histogram(image)
     h = zeros(1,length(image),"double");
@@ -200,7 +199,8 @@ end
 % podemos ver en la imagen del enunciado. Hemos hecho un doble for de 1
 % hasta tamaño/2 y luego indexamos los elementos de la imagen mediante las
 % operaciones 2*i, 2*j, 2*i -1 y 2*j -1. Esto nos permite encontrar el 
-% píxel de mayor tamaño y luego indexar la imagen reducida de manera simple
+% píxel de mayor tamaño y luego indexar la imagen reducida de manera
+% simple.
 
 function himage = halfsize(image)
     tam = size(image)/2;

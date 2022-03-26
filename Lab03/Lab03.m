@@ -29,7 +29,7 @@ subplot(3,2,6), imhist(white), title('Hist white');
 % diferencia entre el valor de intensidad mayor y el menor es mas pequeña
 % que la de las demás imágenes.
 
-% La imagen pollenwhite es la que tiene mayor contraste .
+% La imagen pollenwhite es la que tiene mayor contraste.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 2. Write a function in Matlab to adjust the contrast of an image using 
@@ -130,14 +130,14 @@ subplot(3,2,6), imhist(white_adjust_neg), title('Hist white adjust');
 % hecho de no hacer la saturación nos perjudique. Por ejemplo si tenemos
 % una imagen que todos los píxeles están entre 90 y 100 pero justamente
 % tenemos un píxel de valor 0 y otro de valor 255 no haría ningun
-% "histogram stretching"
+% "histogram stretching".
 
 % Así pues, nosotros elegiríamos la función de MatLab, ya que hace más
 % visibles los rangos centrals a costa de perder sensibilidad, ya que
 % satura los valores extremos. 
 % Si trabajasemos con una aplicación que únicamente necesita información 
 % fiable de los extremos, sería buena idea usar nuestra función. Pero como
-% será el caso mayoritario nosotros escogemos la función de MatLab
+% será el caso mayoritario nosotros escogemos la función de MatLab.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -206,7 +206,7 @@ subplot(3,2,6), imhist(white_eq_m), title('hist white equalized');
 % imagen blanca en la que hay mayores diferencias. Estas diferencias
 % principalemte son que en el histograma de nuestra función hay mayor
 % cantidad de niveles de grises, como podemos ver si ejecutamos el
-% siguiente código
+% siguiente código:
 % num = unique(white_eq)
 % num = unique(white_eq_m)
 % Con el nuestro tenemos 125 valores de grises y con el de matlab 57, esto
@@ -233,7 +233,7 @@ subplot(3,2,6), imhist(white_eq_m), title('hist white equalized');
 % "plano" posible.
 % Otra diferencia que cabe destacar es que con el stretching podemos hacer
 % el proceso inverso para obtener la imagen original pero con el
-% equalization no
+% equalization no.
 
 % Una idea interesante sería unir las dos técnicas. De hacerlo primero
 % deberíamos hacer el estiramiento de histograma y luego la ecualización.
