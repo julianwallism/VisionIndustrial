@@ -9,9 +9,7 @@ filtre=[-1 -1 0; -1 0 1; 0 1 1];
 [rows, cols] = size(imatge);
 for i = 2:rows-1
     for j = 2:cols-1  
-        imatge(i-1:i+1,j-1:j+1).*filtre
-        sum(imatge(i-1:i+1,j-1:j+1).*filtre,[],'all')
-        imatgeFiltrada(i,j) = sum(imatge(i-1:i+1,j-1:j+1).*filtre, [], 'all')    
+        imatgeFiltrada(i,j) = sum(imatge(i-1:i+1,j-1:j+1).*filtre, 'all')    
     end
 end
 
