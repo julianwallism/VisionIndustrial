@@ -113,13 +113,19 @@ subplot(1, 2, 2), imshow(cimage), title('Sharpening');
 
 %% Template Matching
 
-% Given the image imag_tmatch.bmp and the template pattern_tmatch.bmp, detect the points in the image where the letter a exist. The final result must be a binary image where the positions of the detected letters are white pixels.
+% Given the image imag_tmatch.bmp and the template pattern_tmatch.bmp, detect the points in the image where the letter a exist. Using normXcorr2
+% The final result must be a binary image where the positions of the detected letters are white pixels.
 I = imread('imag_tmatch.bmp');
 I = im2gray(I);
 I = im2double(I);
 pattern = imread('pattern_tmatch.bmp');
 pattern = im2gray(pattern);
 pattern = im2double(pattern);
+c = normxcorr2(pattern, I);
+figure(8);
+subplot(1,3,1), imshow(I), title('Original');
+subplot(1,3,2), imshow(pattern), title('Pattern');
+subplot(1,3,3),imshow(c), title('Correlation');
 
 
 
