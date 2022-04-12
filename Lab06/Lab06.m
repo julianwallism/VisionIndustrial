@@ -5,8 +5,8 @@ close all
 
 %% Image Restoration
 
-% Hemos hecho repetido cada ejercicio para las cuatro imagenes asi como se 
-% nos pide en el ejercicio 7.
+% Hemos  repetido cada ejercicio para las cuatro imagenes asi como se nos 
+% pide en el ejercicio 7.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 1. Load and display the image board1.jpg
@@ -186,7 +186,7 @@ speckle_2 = imnoise(cinco_2, 'speckle');
 speckle_3 = imnoise(siete_3, 'speckle');
 speckle_4 = imnoise(nueve_4, 'speckle');
 
-figure(7, 'Name', 'Speckle Noise');
+figure(10, 'Name', 'Speckle Noise');
 subplot(2,2,1), imshow(speckle_1), title('speckle on Image 1');
 subplot(2,2,2), imshow(speckle_2), title('speckle on Image 2');
 subplot(2,2,3), imshow(speckle_3), title('speckle on Image 3');
