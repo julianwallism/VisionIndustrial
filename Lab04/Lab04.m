@@ -68,6 +68,7 @@ subplot(2,2,4), imhist(logImage), title('Logarithmic Image Histogram');
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 5. What can be observed? What is the effect of applying the log 
 % transformation to the image?
+
 % El efecto observable es que la imagen es más brillante y más contrastada,
 % por lo que se llegan a ver zonas que en la imagen original no se podían 
 % apreciar. En el histograma se observa como se desplazan los valores más 
@@ -99,7 +100,8 @@ subplot(1,2,2), imhist(normImage), title('Original Image Histogram');
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 3. If a lighter image is wanted, which values of γ do we need to use: 
 % lower or higher than 1?
-% lower than 1 because the image is darker and the image is more contrasty CP
+% Necesitamos usar valores más pequeños que 1 para que la imagen sea más
+% brillante.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 4. Using different values of gamma, obtain three lighter versions of the image.
@@ -119,6 +121,10 @@ subplot(3,2,6), imhist(Img_3), title('Power Law Image 3 Histogram');
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 5. Which image would you use for a further processing step? Why?
+% Usaríamos la segunda imagen con un valor de γ de 0.5, ya que es un equilibrio
+% entre los otros dos valores. Se obtiene más información que con el valor 0.75
+% ya que se pueden observar zonas que antes no se podía (zonas más oscuras)
+% y a su vez está más contrastada que para el valor 0.25.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 6. Display the image landscape.jpg and its histogram.
@@ -148,6 +154,13 @@ subplot(3,2,6), imhist(Img_3), title('Power Law Image 3 Histogram');
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 9. Which image would you use for a further processing step? Why?
+% Depende del análisis estaríamos entre las imágenes con valores tres y 
+% cuatro. En cualquiera de ambos casos la mejoría es muy notable en 
+% comparación con la imagen original. Si nos interesa analizar las zonas 
+% más oscuras, usaríamos la primera imagen pero si lo que nos interesa es
+% una imagen más contrastada usaríamos la segunda imagen. En la tercera
+% con valor de ocho, ya se empieza a perder información en las zonas más 
+% oscuras.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -166,8 +179,9 @@ subplot(1,2,2), imhist(normImage), title('Original Image Histogram');
 % 2. In order to separate the screws from the background, what might be a 
 % good range of intensities for thresholding? Justify your answer 
 % graphically.
-% 0.5 is a good threshold because it separates the background from the 
-% screws. CP
+% 0,5 es un buen umbral porque separa el fondo de los tornillos, coomo se 
+% ve en la imagen. Ahora bien, cualquier calor cercano a 0.5 también 
+% funcionaría.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 3. Write a function in Matlab to apply a thresholding operation to an 
@@ -205,6 +219,12 @@ subplot(1,3,3), imshow(binarizedImageMatlab), title('Binarized Image Matlab');
 
 % adaptthresh is a function that adaptively thresholds an image.        CP
 % graythresh is a function that thresholds an image with Otsu's method.
+
+% La función graythresh utiliza el método Otsu para minimizar la varianza
+% entre píxeles blancos y negros, para ello utiliza un umbral. Este umbral
+% se aplica sobre todos los píxeles por igual. En cambio la función
+% adaptthresh calcula los valores del threshold por regiones.
+
 Img = imread("screws.jpg");
 normImage = rgb2gray(Img);
 normImage = im2double(normImage);
@@ -215,8 +235,8 @@ binarizedImage1 = imbinarize(normImage, thresholdG);
 binarizedImage2 = imbinarize(normImage, thresholdA);
 
 figure(10);
-subplot(1,2,1), imshow(binarizedImage1), title('Binarized Image 1');
-subplot(1,2,2), imshow(binarizedImage2), title('Binarized Image 2');
+subplot(1,2,1), imshow(binarizedImage1), title('Binarized Image Graythresh');
+subplot(1,2,2), imshow(binarizedImage2), title('Binarized Image Adaptthresh');
 
 
 %%%%% Ejercicio 1 L.T %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
