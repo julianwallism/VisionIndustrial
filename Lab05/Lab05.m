@@ -34,6 +34,9 @@ subplot(1,2,2), imshow(cimage), title('Correlation');
 % of size 3×3, 5×5, 9×9, 15×15 and 35×35 and display the resulting images. 
 % What is the effect of using an average filter? What is the effect of 
 % augmenting the size of the kernel?
+
+% A medida que se va aumentando el tamaño del filtro el suavizado es mayor
+% Además, el color gris de fondo se oscurece ligeramente.
 I = imread('letters.jpg');
 I = im2double(I);
 tres = fspecial('average', 3);
@@ -50,7 +53,11 @@ subplot(2,3,4), imshow(imfilter(I, nueve)), title('9x9');
 subplot(2,3,5), imshow(imfilter(I, quince)), title('15x15');
 subplot(2,3,6), imshow(imfilter(I, treinta)), title('35x35');
 
-% 4. Using the function written in exercise 1, apply the following weighted average filter to the image and compare the results with the ones obtained in exercise 2:
+% 4. Using the function written in exercise 1, apply the following weighted
+% average filter to the image and compare the results with the ones
+% obtained in exercise 2:
+
+% No observamos ninguna diferencia apreciable a simple vista.
 I = imread('letters.jpg');
 I = im2gray(I);
 I = im2double(I);
@@ -66,14 +73,18 @@ subplot(1,3,3), imshow(cimage2), title('Correlation 2');
 
 %% Sharpening
 
-% 1. Load the image moon.bmp, convert it to the range [0.0, 1.0] and display it.
+% 1. Load the image moon.bmp, convert it to the range [0.0, 1.0] and 
+% display it.
 I = imread('moon.bmp');
 I = im2gray(I);
 I = im2double(I);
 figure(4);
 imshow(I), title('moon');
 
-% 2. Using the filtering function available in Matlab, apply the above-mentioned Laplacian mask to the image in order to obtain the second derivative. Subtract the response from the original image in order to sharp the details and display the resulting images
+% 2. Using the filtering function available in Matlab, apply the 
+% above-mentioned Laplacian mask to the image in order to obtain the second
+% derivative. Subtract the response from the original image in order to 
+% sharp the details and display the resulting images
 I = imread('moon.bmp');
 I = im2gray(I);
 I = im2double(I);
@@ -102,19 +113,27 @@ subplot(1, 3, 1), imshow(I), title('Original');
 subplot(1, 3, 2), imshow(diff), title('Diff');
 subplot(1, 3, 3), imshow(cimage), title('Sharpening');
 
-% 4. Sharp the image with the unsharp filter available in the fspecial function and show the results. Is it the same as the previous ones?
-I = imread('moon.bmp');
-I = im2gray(I);
-I = im2double(I);
-cimage= imfilter(I, fspecial('unsharp'));
+% 4. Sharp the image with the unsharp filter available in the fspecial
+% function and show the results. Is it the same as the previous ones?
+
+% Hay una diferencia notable, con el filtro unsharp la imagen es mucho
+% más nítida. Los bordes están más definidos y el color blanco resaalta
+% más.
+I2 = imread('moon.bmp');
+I2 = im2gray(I2);
+I2 = im2double(I2);
+cimage2= imfilter(I2, fspecial('unsharp'));
 figure(7);
-subplot(1, 2, 1), imshow(I), title('Original');
-subplot(1, 2, 2), imshow(cimage), title('Sharpening');
+subplot(1, 3, 1), imshow(I), title('Original');
+subplot(1, 3, 2), imshow(cimage), title('Sharpening');
+subplot(1, 3, 3), imshow(cimage2), title('Sharpening with unsharp');
 
 %% Template Matching
 
-% Given the image imag_tmatch.bmp and the template pattern_tmatch.bmp, detect the points in the image where the letter a exist. Using normXcorr2
-% The final result must be a binary image where the positions of the detected letters are white pixels.
+% Given the image imag_tmatch.bmp and the template pattern_tmatch.bmp, 
+% detect the points in the image where the letter a exist. Using normXcorr2
+% The final result must be a binary image where the positions of the 
+% detected letters are white pixels.
 I = imread('imag_tmatch.bmp');
 I = im2gray(I);
 I = im2double(I);
