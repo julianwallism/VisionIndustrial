@@ -68,10 +68,10 @@ subplot(2,2,4), imhist(logImage), title('Logarithmic Image Histogram');
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 5. What can be observed? What is the effect of applying the log 
 % transformation to the image?
+% The effect is that the image is more bright and the image is more
+% contrasty. CP
 % El efecto observable es que la imagen es más brillante y más contrastada,
-% por lo que se llegan a ver zonas que en la imagen original no se podían 
-% apreciar. En el histograma se observa como se desplazan los valores más 
-% oscuros hacia la derecha (más claros).
+% por lo que se lle
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
