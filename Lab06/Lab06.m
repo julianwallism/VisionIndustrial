@@ -138,18 +138,13 @@ subplot(2,2,4), imshow(nueve_1), title('9x9');
 % que se logra eliminar casi la totalidad del ruido conservando aún la  
 % forma original de la imagen. Con el 3x3 se obtiene un resultado 
 % igualmente muy bueno pero con un poco más de ruido y finalmente, los 
-% filtros más grandes degradan mucho la imagen. 
+% filtros más grandes distorsionan mucho la imagen. 
 
 % Board 2
-tres_2 = medfilt2(I2, [3 3]);
-cinco_2 = medfilt2(I2, [5 5]);
-siete_2 = medfilt2(I2, [7 7]);
-nueve_2 = medfilt2(I2, [9 9]);
-
-% tres_2 = ordfilt2(I2, 1, ones(3,3));
-% cinco_2 = ordfilt2(I2, 1, ones(5,5));
-% siete_2 = ordfilt2(I2, 1, ones(7,7));
-% nueve_2 = ordfilt2(I2, 1, ones(9,9));
+tres_2 = ordfilt2(I2, 1, ones(3,3));
+cinco_2 = ordfilt2(I2, 1, ones(5,5));
+siete_2 = ordfilt2(I2, 1, ones(7,7));
+nueve_2 = ordfilt2(I2, 1, ones(9,9));
 
 figure('Name', 'Sizes on Image 2');
 subplot(2,2,1), imshow(tres_2), title('3x3');
@@ -157,22 +152,16 @@ subplot(2,2,2), imshow(cinco_2), title('5x5');
 subplot(2,2,3), imshow(siete_2), title('7x7');
 subplot(2,2,4), imshow(nueve_2), title('9x9');
 
-% Al igual que en el caso anterior, con el filtro de tamaño 5x5 se obtiene
-% el mejor resultado. Pasa lo mismo con el filtro 3x3 (no elimina todo el 
-% ruido) y los de mayor tamaño distorsionan mucho la imagen.
+% El mejor resultado lo obtenemos con el filtro 3x3, ya que en el resto
+% los negros tienden a distornsionarse y expandirse. Esto se debe que al
+% elegir filtros más grandes es más probable que encuentre un 0 (negro),
+% por lo que gana más predominancia en la imagen.
 
 % Board 3
-tres_3 = medfilt2(I3, [3 3]);
-cinco_3 = medfilt2(I3, [5 5]);
-siete_3 = medfilt2(I3, [7 7]);
-nueve_3 = medfilt2(I3, [9 9]);
-
-% ordfilt2(I3, 9, ones(3,3));
-
-% tres_3 = ordfilt2(I3, 9, ones(3,3));
-% cinco_3 = ordfilt2(I3, 9, ones(5,5));
-% siete_3 = ordfilt2(I3, 9, ones(7,7));
-% nueve_3 = ordfilt2(I3, 9, ones(9,9));
+tres_3 = ordfilt2(I3, 9, ones(3,3));
+cinco_3 = ordfilt2(I3, 9, ones(5,5));
+siete_3 = ordfilt2(I3, 9, ones(7,7));
+nueve_3 = ordfilt2(I3, 9, ones(9,9));
 
 figure('Name', 'Sizes on Image 3');
 subplot(2,2,1), imshow(tres_3), title('3x3');
@@ -180,22 +169,17 @@ subplot(2,2,2), imshow(cinco_3), title('5x5');
 subplot(2,2,3), imshow(siete_3), title('7x7');
 subplot(2,2,4), imshow(nueve_3), title('9x9');
 
-% Al ser una degradación similar a la anterior (sólo que con píxeles 
-% opuestos), es de esperar que los resultados sean similares. El 5x5 sigue
-% siendo la mejor opción.
+% Se obtiene un mejor resultado con el filtro 3x3, aunque las zonas de 
+% color negro tienden a estrecharse. En cambio, con los filtros más grandes
+% las zonas negras tienden a agrandarse. Incluso en los filtros 7x7 y 9x9
+% aparece ruido (parecido al pepper), lo que en el 9x9 ya es irreconocible
+% la imagen original.
 
 % Board 4
-tres_4 = medfilt2(I4, [3 3]);
-cinco_4 = medfilt2(I4, [5 5]);
-siete_4 = medfilt2(I4, [7 7]);
-nueve_4 = medfilt2(I4, [9 9]);
-
-% average = imfilter(I4, fspecial('average', 3));
-
-% tres_4 = imfilter(I4, fspecial('average', 3));
-% cinco_4 = imfilter(I4, fspecial('average', 5));
-% siete_4 = imfilter(I4, fspecial('average', 7));
-% nueve_4 = imfilter(I4, fspecial('average', 9));
+tres_4 = imfilter(I4, fspecial('average', 3));
+cinco_4 = imfilter(I4, fspecial('average', 5));
+siete_4 = imfilter(I4, fspecial('average', 7));
+nueve_4 = imfilter(I4, fspecial('average', 9));
 
 figure('Name', 'Sizes on Image 4');
 subplot(2,2,1), imshow(tres_4), title('3x3');
@@ -203,11 +187,9 @@ subplot(2,2,2), imshow(cinco_4), title('5x5');
 subplot(2,2,3), imshow(siete_4), title('7x7');
 subplot(2,2,4), imshow(nueve_4), title('9x9');
 
-% Finalmente en la degradación Gaussiana se obtiene el mejor resultado con
-% el filtro 3x3. Al ser una degradación uniforme, aunque con el filtro 3x3
-% aún se obtiene un poco de ruido, no se nota tanto al estar distribuido de
-% manera normal. Además, la nitidez de las líneas no se pierde, cosa que sí
-% pasa con los otros filtros.
+% El mejor filtro es el 3x3 ya que se logra eliminar gran parte del ruido
+% conservando la forma original de la imagen. A medida que el filtro es 
+% más grande, la imagen resultante se va difuminando.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 6. Use the imnoise function to add a different noise than the original to
@@ -232,8 +214,10 @@ subplot(2,2,4), imshow(speckle_4), title('speckle on Image 4');
 % filters, indicating when should be used each one and the effects that
 % produces in the output image.
 
+% medfilt2: Este filtro es más eficaz que la convolución cuando el objetivo
+% es reducir el ruido y mantener los bordes al mismo tiempo.
+
+% ordfilt2: Este filtro, tanto para los casos en los que aplicamos un
+% mínimo o un máximo, logra un mayor rendimiento (en velocidad).
+
 % imfilter
-
-% medfilt2
-
-% ordfilt2
