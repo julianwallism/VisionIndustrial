@@ -134,11 +134,11 @@ subplot(2,2,2), imshow(cinco_1), title('5x5');
 subplot(2,2,3), imshow(siete_1), title('7x7');
 subplot(2,2,4), imshow(nueve_1), title('9x9');
 
-% Como vemos obtenemos el mejor resultado usando un filtro de tamaño 5x5
-% ya que se logra eliminar casi la totalidad del ruido conservando aún
-% la forma original de la imagen. Con el 3x3 se obtiene un resultado igualmente
-% muy bueno pero con un poco más de ruido y finalmente, los filtros más grandes
-% degradan mucho la imagen. 
+% Como vemos obtenemos el mejor resultado usando un filtro de tamaño 5x5 ya
+% que se logra eliminar casi la totalidad del ruido conservando aún la  
+% forma original de la imagen. Con el 3x3 se obtiene un resultado 
+% igualmente muy bueno pero con un poco más de ruido y finalmente, los 
+% filtros más grandes degradan mucho la imagen. 
 
 % Board 2
 tres_2 = medfilt2(I2, [3 3]);
@@ -158,8 +158,8 @@ subplot(2,2,3), imshow(siete_2), title('7x7');
 subplot(2,2,4), imshow(nueve_2), title('9x9');
 
 % Al igual que en el caso anterior, con el filtro de tamaño 5x5 se obtiene
-% el mejor resultado. Pasa lo mismo con el filtro 3x3 (no elimina todo el ruido)
-% y los de mayor tamaño distorsionan mucho la imagen.
+% el mejor resultado. Pasa lo mismo con el filtro 3x3 (no elimina todo el 
+% ruido) y los de mayor tamaño distorsionan mucho la imagen.
 
 % Board 3
 tres_3 = medfilt2(I3, [3 3]);
@@ -180,8 +180,9 @@ subplot(2,2,2), imshow(cinco_3), title('5x5');
 subplot(2,2,3), imshow(siete_3), title('7x7');
 subplot(2,2,4), imshow(nueve_3), title('9x9');
 
-% Al ser una degradación similar a la anterior (sólo que con píxeles opuestos),
-% es de esperar que los resultados sean similares. El 5x5 sigue siendo la mejor opción.
+% Al ser una degradación similar a la anterior (sólo que con píxeles 
+% opuestos), es de esperar que los resultados sean similares. El 5x5 sigue
+% siendo la mejor opción.
 
 % Board 4
 tres_4 = medfilt2(I4, [3 3]);
@@ -202,10 +203,11 @@ subplot(2,2,2), imshow(cinco_4), title('5x5');
 subplot(2,2,3), imshow(siete_4), title('7x7');
 subplot(2,2,4), imshow(nueve_4), title('9x9');
 
-% Finalmente en la degradación Gaussiana se obtiene el mejor resultado con el filtro 3x3.
-% Al ser una degradación uniforme, aunque con el filtro 3x3 aún se obtiene un poco de ruido,
-% no se nota tanto al estar distribuido de manera normal. Además, la nitidez de las líneas no se pierde,
-% cosa que sí pasa con los otros filtros.
+% Finalmente en la degradación Gaussiana se obtiene el mejor resultado con
+% el filtro 3x3. Al ser una degradación uniforme, aunque con el filtro 3x3
+% aún se obtiene un poco de ruido, no se nota tanto al estar distribuido de
+% manera normal. Además, la nitidez de las líneas no se pierde, cosa que sí
+% pasa con los otros filtros.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 6. Use the imnoise function to add a different noise than the original to

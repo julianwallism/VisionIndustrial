@@ -104,8 +104,8 @@ subplot(1,2,2), imhist(normImage), title('Original Image Histogram');
 % brillante.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 4. Using different values of gamma, obtain three lighter versions of the image.
-% Show the resulting images and their corresponding histograms.
+% 4. Using different values of gamma, obtain three lighter versions of the 
+% image. Show the resulting images and their corresponding histograms.
 
 Img_1 = powerlaw(normImage, 0.75);
 Img_2 = powerlaw(normImage, 0.5);
@@ -121,10 +121,11 @@ subplot(3,2,6), imhist(Img_3), title('Power Law Image 3 Histogram');
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 5. Which image would you use for a further processing step? Why?
-% Usaríamos la segunda imagen con un valor de γ de 0.5, ya que es un equilibrio
-% entre los otros dos valores. Se obtiene más información que con el valor 0.75
-% ya que se pueden observar zonas que antes no se podía (zonas más oscuras)
-% y a su vez está más contrastada que para el valor 0.25.
+% Usaríamos la segunda imagen con un valor de γ de 0.5, ya que es un 
+% equilibrio entre los otros dos valores. Se obtiene más información que 
+% con el valor 0.75 ya que se pueden observar zonas que antes no se podía 
+% (zonas más oscuras) y a su vez está más contrastada que para el 
+% valor 0.25.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 6. Display the image landscape.jpg and its histogram.
@@ -216,9 +217,6 @@ subplot(1,3,3), imshow(binarizedImageMatlab), title('Binarized Image Matlab');
 % do? Use graythresh for obtaining the value of the threshold with Otsu's 
 % method. Binarize screws.jpg with different thresholds and display the
 % results
-
-% adaptthresh is a function that adaptively thresholds an image.        CP
-% graythresh is a function that thresholds an image with Otsu's method.
 
 % La función graythresh utiliza el método Otsu para minimizar la varianza
 % entre píxeles blancos y negros, para ello utiliza un umbral. Este umbral
