@@ -26,7 +26,7 @@ I4 = imread('board4.jpg');
 I4 = im2gray(I4);
 I4 = im2double(I4);
 
-figure(1, 'Name', 'Original Images');
+figure('Name', 'Original Images');
 subplot(2,2,1), imshow(I1), title('Image 1');
 subplot(2,2,2), imshow(I2), title('Image 2');
 subplot(2,2,3), imshow(I3), title('Image 3');
@@ -44,8 +44,8 @@ subplot(2,2,4), imshow(I4), title('Image 4');
 % Para una imagen con ruido guassiano aplicaríamos un filtro espacial 
 % lineal, en concreto el de la media.
 
-% Así pues la imagen board1 tiene ruido S&P, ya que hay píxeles "aleatorios"
-% con valor 0 y 1, debemos aplicar el filtro de la mediana.
+% Así pues la imagen board1 tiene ruido S&P, ya que hay píxeles 
+% "aleatorios" con valor 0 y 1, debemos aplicar el filtro de la mediana.
 
 % La imagen board2 tiene ruido Salt, ya que hay píxeles "aleatorios" con
 % valor 1, debemos aplicar el filtro min.
@@ -55,7 +55,7 @@ subplot(2,2,4), imshow(I4), title('Image 4');
 
 % La imagen board4 tiene ruido Gaussiano, ya que se puede apreciar que 
 % presenta un ruido "continuo" en toda la imagen que responde a una 
-% distribución norrmal. Debemos aplicar el filtro de la media
+% distribución normal. Debemos aplicar el filtro de la media
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -67,7 +67,7 @@ median = medfilt2(I1);
 max = ordfilt2(I1, 9, ones(3,3));
 min = ordfilt2(I1, 1, ones(3,3));
 
-figure(2, 'Name', 'Filters on Image 1');
+figure('Name', 'Filters on Image 1');
 subplot(2,2,1), imshow(average), title('Average');
 subplot(2,2,2), imshow(median), title('Median');
 subplot(2,2,3), imshow(max), title('Max');
@@ -79,7 +79,7 @@ median = medfilt2(I2);
 max = ordfilt2(I2, 9, ones(3,3));
 min = ordfilt2(I2, 1, ones(3,3));
 
-figure(3, 'Name', 'Filters on Image 2');
+figure('Name', 'Filters on Image 2');
 subplot(2,2,1), imshow(average), title('Average');
 subplot(2,2,2), imshow(median), title('Median');
 subplot(2,2,3), imshow(max), title('Max');
@@ -91,7 +91,7 @@ median = medfilt2(I3);
 max = ordfilt2(I3, 9, ones(3,3));
 min = ordfilt2(I3, 1, ones(3,3));
 
-figure(4, 'Name', 'Filters on Image 3');
+figure('Name', 'Filters on Image 3');
 subplot(2,2,1), imshow(average), title('Average');
 subplot(2,2,2), imshow(median), title('Median');
 subplot(2,2,3), imshow(max), title('Max');
@@ -103,7 +103,7 @@ median = medfilt2(I4);
 max = ordfilt2(I4, 9, ones(3,3));
 min = ordfilt2(I4, 1, ones(3,3));
 
-figure(5, 'Name', 'Filters on Image 4');
+figure('Name', 'Filters on Image 4');
 subplot(2,2,1), imshow(average), title('Average');
 subplot(2,2,2), imshow(median), title('Median');
 subplot(2,2,3), imshow(max), title('Max');
@@ -128,13 +128,17 @@ cinco_1 = medfilt2(I1, [5 5]);
 siete_1 = medfilt2(I1, [7 7]);
 nueve_1 = medfilt2(I1, [9 9]);
 
-figure(6, 'Name', 'Sizes on Image 1');
+figure('Name', 'Sizes on Image 1');
 subplot(2,2,1), imshow(tres_1), title('3x3');
 subplot(2,2,2), imshow(cinco_1), title('5x5');
 subplot(2,2,3), imshow(siete_1), title('7x7');
 subplot(2,2,4), imshow(nueve_1), title('9x9');
 
-% Como vemos obtenemos el mejor resultado usando un filtro de tamaño XxX
+% Como vemos obtenemos el mejor resultado usando un filtro de tamaño 5x5
+% ya que se logra eliminar casi la totalidad del ruido conservando aún
+% la forma original de la imagen. Con el 3x3 se obtiene un resultado igualmente
+% muy bueno pero con un poco más de ruido y finalmente, los filtros más grandes
+% degradan mucho la imagen. 
 
 % Board 2
 tres_2 = medfilt2(I2, [3 3]);
@@ -142,13 +146,20 @@ cinco_2 = medfilt2(I2, [5 5]);
 siete_2 = medfilt2(I2, [7 7]);
 nueve_2 = medfilt2(I2, [9 9]);
 
-figure(7, 'Name', 'Sizes on Image 2');
+% tres_2 = ordfilt2(I2, 1, ones(3,3));
+% cinco_2 = ordfilt2(I2, 1, ones(5,5));
+% siete_2 = ordfilt2(I2, 1, ones(7,7));
+% nueve_2 = ordfilt2(I2, 1, ones(9,9));
+
+figure('Name', 'Sizes on Image 2');
 subplot(2,2,1), imshow(tres_2), title('3x3');
 subplot(2,2,2), imshow(cinco_2), title('5x5');
 subplot(2,2,3), imshow(siete_2), title('7x7');
 subplot(2,2,4), imshow(nueve_2), title('9x9');
 
-% Como vemos obtenemos el mejor resultado usando un filtro de tamaño XxX
+% Al igual que en el caso anterior, con el filtro de tamaño 5x5 se obtiene
+% el mejor resultado. Pasa lo mismo con el filtro 3x3 (no elimina todo el ruido)
+% y los de mayor tamaño distorsionan mucho la imagen.
 
 % Board 3
 tres_3 = medfilt2(I3, [3 3]);
@@ -156,13 +167,21 @@ cinco_3 = medfilt2(I3, [5 5]);
 siete_3 = medfilt2(I3, [7 7]);
 nueve_3 = medfilt2(I3, [9 9]);
 
-figure(8, 'Name', 'Sizes on Image 3');
+% ordfilt2(I3, 9, ones(3,3));
+
+% tres_3 = ordfilt2(I3, 9, ones(3,3));
+% cinco_3 = ordfilt2(I3, 9, ones(5,5));
+% siete_3 = ordfilt2(I3, 9, ones(7,7));
+% nueve_3 = ordfilt2(I3, 9, ones(9,9));
+
+figure('Name', 'Sizes on Image 3');
 subplot(2,2,1), imshow(tres_3), title('3x3');
 subplot(2,2,2), imshow(cinco_3), title('5x5');
 subplot(2,2,3), imshow(siete_3), title('7x7');
 subplot(2,2,4), imshow(nueve_3), title('9x9');
 
-% Como vemos obtenemos el mejor resultado usando un filtro de tamaño XxX
+% Al ser una degradación similar a la anterior (sólo que con píxeles opuestos),
+% es de esperar que los resultados sean similares. El 5x5 sigue siendo la mejor opción.
 
 % Board 4
 tres_4 = medfilt2(I4, [3 3]);
@@ -170,13 +189,23 @@ cinco_4 = medfilt2(I4, [5 5]);
 siete_4 = medfilt2(I4, [7 7]);
 nueve_4 = medfilt2(I4, [9 9]);
 
-figure(9, 'Name', 'Sizes on Image 4');
+% average = imfilter(I4, fspecial('average', 3));
+
+% tres_4 = imfilter(I4, fspecial('average', 3));
+% cinco_4 = imfilter(I4, fspecial('average', 5));
+% siete_4 = imfilter(I4, fspecial('average', 7));
+% nueve_4 = imfilter(I4, fspecial('average', 9));
+
+figure('Name', 'Sizes on Image 4');
 subplot(2,2,1), imshow(tres_4), title('3x3');
 subplot(2,2,2), imshow(cinco_4), title('5x5');
 subplot(2,2,3), imshow(siete_4), title('7x7');
 subplot(2,2,4), imshow(nueve_4), title('9x9');
 
-% Como vemos obtenemos el mejor resultado usando un filtro de tamaño XxX
+% Finalmente en la degradación Gaussiana se obtiene el mejor resultado con el filtro 3x3.
+% Al ser una degradación uniforme, aunque con el filtro 3x3 aún se obtiene un poco de ruido,
+% no se nota tanto al estar distribuido de manera normal. Además, la nitidez de las líneas no se pierde,
+% cosa que sí pasa con los otros filtros.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 6. Use the imnoise function to add a different noise than the original to
@@ -186,7 +215,7 @@ speckle_2 = imnoise(cinco_2, 'speckle');
 speckle_3 = imnoise(siete_3, 'speckle');
 speckle_4 = imnoise(nueve_4, 'speckle');
 
-figure(10, 'Name', 'Speckle Noise');
+figure('Name', 'Speckle Noise');
 subplot(2,2,1), imshow(speckle_1), title('speckle on Image 1');
 subplot(2,2,2), imshow(speckle_2), title('speckle on Image 2');
 subplot(2,2,3), imshow(speckle_3), title('speckle on Image 3');
@@ -197,8 +226,12 @@ subplot(2,2,4), imshow(speckle_4), title('speckle on Image 4');
 % board3.jpg, board4.jpg.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 8. Explain the main advantages and disadvantages of each of these filters,
-% indicating when should be used each one and the effects that produces in 
-% the output image.
+% 8. Explain the main advantages and disadvantages of each of these 
+% filters, indicating when should be used each one and the effects that
+% produces in the output image.
 
+% imfilter
 
+% medfilt2
+
+% ordfilt2
