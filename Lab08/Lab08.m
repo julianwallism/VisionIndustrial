@@ -1,23 +1,26 @@
 %%%%%%%%%%%%%%%%%
 %%    LAB 08   %%
 %%%%%%%%%%%%%%%%%
+clear all;
 
 %% First-Order Derivatives
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% 1. Write a function in Matlab to compute the gradient of an image in both
-% directions using the Sobel operator. You can use Matlab functions, except 
+%% 1. Write a function in Matlab to compute the gradient of an image in both
+% directions using the Sobel operator. You can use Matlab functions, except
 % edge. The function signature should be: function[Gx, Gy] = gradients(img)
-% where Gx and Gy are the gradients and img is an image with values between 
+% where Gx and Gy are the gradients and img is an image with values between
 % the range [0.0, 1.0].
 
-% 2. Load and display the image house.jpg.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 2. Load and display the image house.jpg.
 I = imread('house.jpg');
+figure(1);
 imshow(I);
 
-% 3. Compute the gradients of the image in both directions using the 
-% function created in exercise 1. Display the resulting gradients, 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 3. Compute the gradients of the image in both directions using the
+% function created in exercise 1. Display the resulting gradients,
 % converting them to a grayscale image.
 
 I = im2double(I);
@@ -25,120 +28,229 @@ I = im2double(I);
 Gx = im2gray(Gx);
 Gy = im2gray(Gy);
 
-figure(1);
+figure(2);
 subplot(1,2,1), imshow(Gx), title('Gx');
 subplot(1,2,2), imshow(Gy), title('Gy');
 
-% 4. Compute the magnitude of the gradient at each point using the 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 4. Compute the magnitude of the gradient at each point using the
 % above-mentioned approximation and display the final magnitude image.
 
 Gz = zeros(size(I));
-for i = 1:size(Gx,1)
-    for j = 1:size(Gx,2)
-        Gz(i,j) = sqrt(Gx(i,j)^2 + Gy(i,j)^2);
-    end
-end
+Gz = sqrt(Gx.^2 + Gy.^2);
 
+figure(3);
 imshow(Gz);
 
-% 5. Detect edges in the image, selecting as edges pixels whose magnitude 
-% is above a given threshold. Try different values for this threshold and 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 5. Detect edges in the image, selecting as edges pixels whose magnitude
+% is above a given threshold. Try different values for this threshold and
 % display the results.
+figure(4);
+for i = 1:9
+    Gz_thresh = Gz;
+    thresh = i/10;
+    Gz_thresh(Gz_thresh < thresh) = 0;
+    Gz_thresh(Gz_thresh >= thresh) = 1;
 
+    subplot(3,3,i),imshow(Gz_thresh), title("Gz thresh "+i);
+end
 
-% 6. Using the edge Matlab’s function, compute the edges of the image 
-% using Sobel, Prewitt and Roberts opederators. Test several thresholds 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 6. Using the edge Matlab’s function, compute the edges of the image
+% using Sobel, Prewitt and Roberts opederators. Test several thresholds
 % for each operator and display the best results obtained. Compare them,
 % enumerating the main advantages and disadvantages of each approach.
 
-ImSob = edge(I, 'sobel');
-ImPrew = edge(I, 'prewitt');
-ImRoberts = edge(I, 'roberts');
+figure(5);
+for i = 1:3
+    ImRoberts = edge(I, 'roberts',i/4);
+    ImSob = edge(I, 'sobel',i/4);
+    ImPrew = edge(I, 'prewitt',i/4);
+    subplot(3,3,i), imshow(ImSob), title("Sobel - "+(i/4));
+    subplot(3,3,i+3), imshow(ImPrew), title("Prewitt - "+(i/4));
+    subplot(3,3,i+6), imshow(ImRoberts), title("Roberts - "+(i/4));
+end
 
-% Falta elegir los umbrales!!!!
-figure(2);
-subplot(1,3,1), imshow(ImSob), title('Sobel');
-subplot(1,3,2), imshow(ImPrew), title('Prewitt');
-subplot(1,3,3), imshow(ImRoberts), title('Roberts');
+% TODO
+% Comparacion:
+% Ventajas de Sobel:
+%   - Es 
+% Ventajas de Prewitt:
+%   - Es
+% Ventajas de Roberts:
+%   - Es
 
-% 7. Apply the Canny edge detector to the image using the default 
-% parameters, display the obtained edges and compare the results with 
-% the previous ones. Vary the parameters of the algorithm and explain 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 7. Apply the Canny edge detector to the image using the default
+% parameters, display the obtained edges and compare the results with
+% the previous ones. Vary the parameters of the algorithm and explain
 % the observed effects.
 
-ImCanny = edge(I, 'canny');
-imshow(ImCanny);
+figure(6);
+z = 1;
+for i = 1:3
+    for j = 1:5
+        if i < j
+            ImCanny = edge(I, 'canny',[i/10,j/10]);
+            subplot(3,3, z), imshow(ImCanny), title((i/10)+" - "+(j/10));
+            z=z+1;
+        end
+    end
+end
 
+% El método de Canny aplica dos umbrales al gradiente: un umbral alto
+% (baja sensibilidad de detección) y un umbral bajo (alta sensibilidad de detección).
+% edge comienza con el resultado de baja sensibilidad y, después, lo expande
+% hasta incluir los píxeles de los bordes conectados del resultado de alta
+% sensibilidad. Esto contribuye a llenar los posibles huecos en los bordes detectados.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Second-Order Derivatives
 
-% 1. Write a function in Matlab to compute zero-crossings given a 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 1. Write a function in Matlab to compute zero-crossings given a
 % second-order derivative matrix. The function signature should be:
 % function imedges = zerocrossings(deriv2, T)
 % where deriv2 is a second-order derivative image, T is a threshold for the
 % magnitude and imedges is a binary image with values established to 1
-% where exists a zero-crossing. A position (x, y) will be considered as 
-% zero crossing if its sign changes in relation to the pixels immediately 
+% where exists a zero-crossing. A position (x, y) will be considered as
+% zero crossing if its sign changes in relation to the pixels immediately
 % to the right or below with a magnitude above some threshold T.
 
-% 2. Reload and display the image house.jpg.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 2. Reload and display the image house.jpg.
 I = imread('house.jpg');
+figure(7);
 imshow(I);
 
-% 3. Compute the second-order derivative of the image using the Laplacian 
-% operator. Display the results.
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %% 3. Compute the second-order derivative of the image using the Laplacian operator.
 
 
-% 4. Compute the edges of the image using the derivative obtained in the 
-% previous exercise and the function coded in exercise 1. Apply several 
-% thresholds and display the output images.
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %% 4. Compute the edges of the image using the derivative obtained in the
+% % previous exercise and the function coded in exercise 1. Apply several
+% % thresholds and display the output images.
 
-% 5. Compute the second-order derivative of the image using a LoG filter of
-% size 13x13 and sigma 2.0. Display the results.
+% figure(8);
+% for i = 1:9
+%     thresh = i/10;
+%     imedges=zerocrossings(deriv2, thresh);
+%     subplot(3,3,i),imshow(imedges), title("imedges "+i);
+% end
 
-% 6. Compute the edges using the results of the previous exercise and the 
-% function written in exercise 1. Apply several thresholds and display the
-% resulting images.
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %% 5. Compute the second-order derivative of the image using a LoG filter of
+% % size 13x13 and sigma 2.0. Display the results.
 
-% 7. Compute the edges using the results of the previous exercise and the 
-% function written in exercise 1. Apply several thresholds and display the 
-% resulting images.
+% sigma = 2;
+% filter = fspecial('log',[13 13],sigma);
+% deriv2 = imfilter(I, filter);
 
-%% Hough Transform
+% figure(9);
+% subplot(1,2,1), imshow(deriv2), title('deriv2');
+% subplot(1,2,2), imshow(im2bw(deriv2)), title('im2bw(deriv2)');
 
-% Using the functions available in the Matlab’s Image Processing Toolbox, 
-% employ the Hough transform to detect the lines of the road present in the
-% images road.jpg and chessboard. As a final result, you should plot the 
-% accumulator and the detected lines in the original image as shown in the 
-% following figure:
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %% 6. Compute the edges of the image using the derivative obtained in the
+% % previous exercise and the function coded in exercise 1. Apply several
+% % thresholds and display the output images.
+
+% figure(10);
+% for i = 1:9
+%     thresh = i/10;
+%     imedges=zerocrossings(deriv2, thresh);
+%     subplot(3,3,i),imshow(imedges), title("imedges "+i);
+% end
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Funciones %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 7. Compute the edges of the image using the two previous operators by 
+% means of the edge Matlab’s function, with default parameters.
+% play the results and compare them with the previous ones.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Hough Transform
+
+% Using the functions available in the Matlab’s Image Processing Toolbox,
+% employ the Hough transform to detect the lines of the road present in the
+% images road.jpg and chessboard. As a final result, you should plot the
+% accumulator and the detected lines in the original image as shown in the
+% following figure:
+
+I = imread('road.jpg');
+I = im2double(I);
+I = im2gray(I);
+
+BW = edge(I, 'canny');
+% Hough matrix
+[H,T,R] = hough(BW);
+% Peaks
+P = houghpeaks(H,5,'threshold',ceil(0.3*max(H(:))));
+% Lines
+L = houghlines(BW,T,R,P,'FillGap',5,'MinLength',7);
+figure(11);
+imshow(I), hold on;
+for k = 1:length(L)
+    xy = [L(k).point1; L(k).point2];
+    plot(xy(:,1),xy(:,2),'LineWidth',2,'Color','red');
+end
+
+
+I2 = imread('chessboard.jpg');
+I2 = im2double(I2);
+I2 = im2gray(I2);
+
+BW2 = edge(I2, 'canny');
+% Hough matrix
+[H2,T2,R2] = hough(BW2);
+% Peaks
+P2 = houghpeaks(H2,5,'threshold',ceil(0.3*max(H2(:))));
+% Lines
+L2 = houghlines(BW2,T2,R2,P2,'FillGap',5,'MinLength',7);
+figure(12);
+imshow(I2), hold on;
+for k = 1:length(L2)
+    xy = [L2(k).point1; L2(k).point2];
+    plot(xy(:,1),xy(:,2),'LineWidth',2,'Color','red');
+end
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Funciones %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Ejercicio 1.1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% CP
 function[Gx, Gy] = gradients(img)
-    % Sobel operator
-    Gx = conv2(img, [-1 0 1; -2 0 2; -1 0 1], 'same');
-    Gy = conv2(img, [-1 -2 -1; 0 0 0; 1 2 1], 'same');
+    Gx = imfilter(img, fspecial('sobel'), 'conv');
+    Gy = imfilter(img, fspecial('sobel'), 'conv');
 end
 
 % Ejercicio 2.1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% CP
 function imedges = zerocrossings(deriv2, T)
-    % Zero-crossings
-    imedges = zeros(size(deriv2));
-    for i = 2:size(deriv2,1)-1
-        for j = 2:size(deriv2,2)-1
-            if deriv2(i,j) > T
-                if (deriv2(i-1,j) < 0 && deriv2(i+1,j) > 0) || (deriv2(i-1,j) > 0 && deriv2(i+1,j) < 0)
-                    imedges(i,j) = 1;
-                end
-                if (deriv2(i,j-1) < 0 && deriv2(i,j+1) > 0) || (deriv2(i,j-1) > 0 && deriv2(i,j+1) < 0)
-                    imedges(i,j) = 1;
-                end
+% Zero-crossings
+    [rows, cols]=size(div2);
+    imedges = false(size(deriv2));
+    for i = 1:rows-1
+        for j = 1:cols-1
+            drow=0.0;
+            dcol=0.0;
+            a = deriv2(i,j);
+            b = deriv2(i+1,j);
+            c = deriv2(i,c +1);
+         
+            if((a >= 0 && b < 0) || (a < 0 && b >= 0))
+                drow = abs(a-b);
+            end
+
+            if((a >= 0 && c < 0) || (a < 0 && c >= 0))
+                dcol = abs(a-c);
+            end
+            magnitude = max(drow, dcol);
+            if(magnitude >= T) % CP
+                imedges(i,j) = 1;
             end
         end
-    end
-end 
-
-
+    end 
+end
