@@ -58,7 +58,7 @@ end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 6. Using the edge Matlab’s function, compute the edges of the image
-% using Sobel, Prewitt and Roberts opederators. Test several thresholds
+% using Sobel, Prewitt and Roberts operators. Test several thresholds
 % for each operator and display the best results obtained. Compare them,
 % enumerating the main advantages and disadvantages of each approach.
 
@@ -127,42 +127,43 @@ imshow(I);
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % %% 3. Compute the second-order derivative of the image using the Laplacian operator.
 
+deriv2 = imfilter(I, fspecial('laplacian'));
 
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% %% 4. Compute the edges of the image using the derivative obtained in the
-% % previous exercise and the function coded in exercise 1. Apply several
-% % thresholds and display the output images.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 4. Compute the edges of the image using the derivative obtained in the
+% previous exercise and the function coded in exercise 1. Apply several
+% thresholds and display the output images.
 
-% figure(8);
-% for i = 1:9
-%     thresh = i/10;
-%     imedges=zerocrossings(deriv2, thresh);
-%     subplot(3,3,i),imshow(imedges), title("imedges "+i);
-% end
+figure(8);
+for i = 1:9
+    thresh = i/10;
+    imedges=zerocrossings(deriv2, thresh);
+    subplot(3,3,i),imshow(imedges), title("imedges "+i);
+end
 
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% %% 5. Compute the second-order derivative of the image using a LoG filter of
-% % size 13x13 and sigma 2.0. Display the results.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 5. Compute the second-order derivative of the image using a LoG filter of
+% size 13x13 and sigma 2.0. Display the results.
 
-% sigma = 2;
-% filter = fspecial('log',[13 13],sigma);
-% deriv2 = imfilter(I, filter);
+sigma = 2;
+filter = fspecial('log',[13 13],sigma);
+deriv2 = imfilter(I, filter);
 
-% figure(9);
-% subplot(1,2,1), imshow(deriv2), title('deriv2');
-% subplot(1,2,2), imshow(im2bw(deriv2)), title('im2bw(deriv2)');
+figure(9);
+subplot(1,2,1), imshow(deriv2), title('deriv2');
+subplot(1,2,2), imshow(im2bw(deriv2)), title('im2bw(deriv2)');
 
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% %% 6. Compute the edges of the image using the derivative obtained in the
-% % previous exercise and the function coded in exercise 1. Apply several
-% % thresholds and display the output images.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 6. Compute the edges of the image using the derivative obtained in the
+% previous exercise and the function coded in exercise 1. Apply several
+% thresholds and display the output images.
 
-% figure(10);
-% for i = 1:9
-%     thresh = i/10;
-%     imedges=zerocrossings(deriv2, thresh);
-%     subplot(3,3,i),imshow(imedges), title("imedges "+i);
-% end
+figure(10);
+for i = 1:9
+    thresh = i/10;
+    imedges=zerocrossings(deriv2, thresh);
+    subplot(3,3,i),imshow(imedges), title("imedges "+i);
+end
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
