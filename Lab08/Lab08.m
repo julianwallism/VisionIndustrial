@@ -160,7 +160,7 @@ figure(8);
 imshow(I);
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% %% 3. Compute the second-order derivative of the image using the Laplacian operator.
+%% 3. Compute the second-order derivative of the image using the Laplacian operator.
 
 deriv2 = imfilter(I, fspecial('laplacian'));
 
@@ -266,7 +266,7 @@ end
 % Ejercicio 2.1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% CP
 function imedges = zerocrossings(deriv2, T)
 % Zero-crossings
-    [rows, cols]=size(div2);
+    [rows, cols]=size(deriv2);
     imedges = false(size(deriv2));
     for i = 1:rows-1
         for j = 1:cols-1
@@ -274,7 +274,7 @@ function imedges = zerocrossings(deriv2, T)
             dcol=0.0;
             a = deriv2(i,j);
             b = deriv2(i+1,j);
-            c = deriv2(i,c +1);
+            c = deriv2(i,j +1);
          
             if((a >= 0 && b < 0) || (a < 0 && b >= 0))
                 drow = abs(a-b);
