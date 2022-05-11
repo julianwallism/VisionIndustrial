@@ -12,6 +12,8 @@ clear all;
 % where Gx and Gy are the gradients and img is an image with values between
 % the range [0.0, 1.0].
 
+% Final del archivo
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 2. Load and display the image house.jpg.
 I = imread('house.jpg');
@@ -72,7 +74,39 @@ for i = 1:3
     subplot(3,3,i+6), imshow(ImRoberts), title("Roberts - "+(i/4));
 end
 
-% TODO
+figure(6);
+j = 0.05;
+for i = 1:3
+
+    ImRoberts = edge(I, 'roberts',j);
+    ImSob = edge(I, 'sobel',j);
+    ImPrew = edge(I, 'prewitt',j);
+    subplot(3,3,i), imshow(ImSob), title("Sobel - "+(j));
+    subplot(3,3,i+3), imshow(ImPrew), title("Prewitt - "+(j));
+    subplot(3,3,i+6), imshow(ImRoberts), title("Roberts - "+(j));
+
+    j = j + 0.05;
+end
+
+% En primer lugar, hicimos pruebas con threshholds intentando encontrar a
+% partir de que umbral los  operadores eran más eficaces. Encontramos que
+% con el valor dle umbral 0.25 ya apenas se observaba nada en las imágenes,
+% por lo que hicimos una nueva prueba con valores mucho más bajos, en este
+% caso 0.05, 0.10 y 0.15.
+
+% En general creemos que el operador Roberts es el que consigue capturas
+% más bordes de la imagen original, pero a costa de añadir excesivas líneas
+% en ciertas zonas. Por ejemplo, es el único operador que detecta las
+% cuatro secciones de la ventana principal. Además, creemos que tiene poca
+% tolerancia al ruido ya que la zona izquierda del garaje, la cual está
+% ligeramente en contacto con el árbol no la detecta.
+
+% Por otro lado, los operadores de Sobel y Prewitt han tenido
+% comportamientos similares o por lo menos, nosotros no hemos apreciado
+% ninguna diferencia significativa. Ambos son los que parecen tener menos
+% líneas de detección, esto es más notable con el valor de 0.15. Lo cual
+% tiene sentido porque parecen menos susceptibles al ruido.
+
 % Comparacion:
 % Ventajas de Sobel:
 %   - Es 
@@ -87,7 +121,7 @@ end
 % the previous ones. Vary the parameters of the algorithm and explain
 % the observed effects.
 
-figure(6);
+figure(7);
 z = 1;
 for i = 1:3
     for j = 1:5
@@ -100,10 +134,11 @@ for i = 1:3
 end
 
 % El método de Canny aplica dos umbrales al gradiente: un umbral alto
-% (baja sensibilidad de detección) y un umbral bajo (alta sensibilidad de detección).
-% edge comienza con el resultado de baja sensibilidad y, después, lo expande
-% hasta incluir los píxeles de los bordes conectados del resultado de alta
-% sensibilidad. Esto contribuye a llenar los posibles huecos en los bordes detectados.
+% (baja sensibilidad de detección) y un umbral bajo (alta sensibilidad de 
+% detección). dge comienza con el resultado de baja sensibilidad y, 
+% después, lo expande hasta incluir los píxeles de los bordes conectados 
+% del resultado de alta sensibilidad. Esto contribuye a llenar los posibles
+% huecos en los bordes detectados.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Second-Order Derivatives
@@ -121,7 +156,7 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 2. Reload and display the image house.jpg.
 I = imread('house.jpg');
-figure(7);
+figure(8);
 imshow(I);
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -134,7 +169,7 @@ deriv2 = imfilter(I, fspecial('laplacian'));
 % previous exercise and the function coded in exercise 1. Apply several
 % thresholds and display the output images.
 
-figure(8);
+figure(9);
 for i = 1:9
     thresh = i/10;
     imedges=zerocrossings(deriv2, thresh);
@@ -149,7 +184,7 @@ sigma = 2;
 filter = fspecial('log',[13 13],sigma);
 deriv2 = imfilter(I, filter);
 
-figure(9);
+figure(10);
 subplot(1,2,1), imshow(deriv2), title('deriv2');
 subplot(1,2,2), imshow(im2bw(deriv2)), title('im2bw(deriv2)');
 
@@ -158,7 +193,7 @@ subplot(1,2,2), imshow(im2bw(deriv2)), title('im2bw(deriv2)');
 % previous exercise and the function coded in exercise 1. Apply several
 % thresholds and display the output images.
 
-figure(10);
+figure(11);
 for i = 1:9
     thresh = i/10;
     imedges=zerocrossings(deriv2, thresh);
