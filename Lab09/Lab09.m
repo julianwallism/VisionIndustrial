@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%
-%%    LAB 09    %%
+%%   LAB 09    %%
 %%%%%%%%%%%%%%%%%
 clear all;
 close all;
@@ -44,9 +44,9 @@ I = imbinarize(I);
 
 I7 = imerode(I, strel('disk', 7));
 
-figure('Name', 'Erosion');
-subplot(2,2,1), imshow(I), title('Original');
-subplot(2,2,2), imshow(I7), title('Eroded 7');
+figure('Name', 'Count Circles');
+subplot(1,2,1), imshow(I), title('Original');
+subplot(1,2,2), imshow(I7), title('Eroded 7');
 
 [~, numFill] = bwlabel(I7);
 disp(numFill);
@@ -83,6 +83,8 @@ subplot(2,3,3), imshow(I_octagon), title('Octagon');
 subplot(2,3,4), imshow(I_cross), title('Cross');
 subplot(2,3,5), imshow(I_rect), title('Rectangle');
 subplot(2,3,6), imshow(I_square), title('Square');
+% Se puede apreciar que obtenemos el mismo resultado con el cuadrado y con
+% el rectángulo ya que un rectangulo de 3x3 es un cuadrado de 3x3
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 6. Load the image licoln.jpg and binarize it
@@ -95,10 +97,17 @@ I = imbinarize(I);
 %% 7. Obtain the boundaries of the image combining an erosion or dilation 
 % operation with the original image.
 I_dilation = imdilate(I, strel('disk', 3));
-boundaries = I_dilation - I;
+I_erosion = imerode(I, strel('disk',3));
 
+boundariesDil = I_dilation - I;
+boundariesEro = I - I_erosion;
+boundaries = boundariesEro + boundariesDil;
 figure('Name', 'Boundaries');
-imshow(boundaries);
+subplot(1,3,1),imshow(boundariesDil), title("Dilatation - Image");
+subplot(1,3,2),imshow(boundariesEro), title("Image - Erosion");
+subplot(1,3,3), imshow(boundaries), title("Dilatation - Erosion");
+% Hemos probado de sumar las dos imagenes (boundariesDil i boundariesElo)
+% esta suma basicamente es restar la erosión a la dilatacion
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% OPENING AND CLOSING
@@ -162,21 +171,35 @@ subplot(2,2,4), imshow(I_27), title('Closing 27');
 I = imread('fingerprint.jpg');
 I = im2double(I);
 I = im2gray(I);
+
 threshold = graythresh(I);
 I = imbinarize(I, threshold);
+
 figure('Name', 'Fingerprint');
 imshow(I), title('Fingerprint');
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 5. Improve the quality of the fingerprint using a combination of opening 
 % and closing operations and display the final results
-s
+
 I_CO_Square_3 = imclose(imopen(I, strel('square', 3)), strel('square', 3));
 I_OC_Square_3 = imopen(imclose(I, strel('square', 3)), strel('square', 3));
 
+I_CO_Rect_3 = imclose(imopen(I, strel('rectangle', [3 3])), strel('rectangle', [3 3]));
+I_OC_Rect_3 = imopen(imclose(I, strel('rectangle', [3 3])), strel('rectangle', [3 3]));
+
+I_CO_Cross_3 = imclose(imopen(I, strel('line', 3, 0)), strel('line', 3, 0));
+I_OC_Cross_3 = imopen(imclose(I, strel('line', 3, 0)), strel('line', 3, 0));
+
 figure('Name', 'Fingerprint CO y OC');
-subplot(1,2,1), imshow(I_CO_Square_3), title('CO Square 3');
-subplot(1,2,2), imshow(I_OC_Square_3), title('OC Square 3');
+subplot(3,2,1), imshow(I_CO_Square_3), title('CO Square 3');
+subplot(3,2,2), imshow(I_OC_Square_3), title('OC Square 3');
+
+subplot(3,2,3), imshow(I_CO_Rect_3), title('CO Rect 3');
+subplot(3,2,4), imshow(I_OC_Rect_3), title('OC Rect 3');
+
+subplot(3,2,5), imshow(I_CO_Cross_3), title('CO Cross 3');
+subplot(3,2,6), imshow(I_OC_Cross_3), title('OC Cross 3');
 
 % Hemos probado de hacer el OC y el CO con un disco de tamaños 3, 5, 7 y 9
 % pero los resultados son muy malos. También hemos mirado de hacerlo con un
@@ -193,6 +216,7 @@ I = im2gray(I);
 threshold = graythresh(I);
 I = imbinarize(I, threshold);
 figure('Name', 'Letters');
+imshow(I);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 2. Apply erosion, dilation, opening and closing transformations to the 
@@ -253,18 +277,43 @@ subplot(2,3,5), imshow(I_closing_G4), title('Closing G4');
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 3. Compute the skeleton only for the letters present in the image and 
 % display, in the same figure, the original image and the results.
-I_skeleton = bwmorph(I, 'skeleton');
-figure('Name', 'Letters Skeleton');
-subplot(1,2,1), imshow(I), title('Original');
-subplot(1,2,2), imshow(I_skeleton), title('Skeleton');
+I_letter = imerode(I, strel('square', 5)); 
+% I_letter = imclose(I_letter, strel('square', 3)); 
+% I_letter = imdilate(I_letter, strel('square', 7)); 
+kernel = zeros(23,23);
 
+% -1 in kernels borders
+kernel(:, 1) = -1;
+kernel(:, 23) = -1;
+kernel(1, :) = -1;
+kernel(23, :) = -1;
+kernel(12,12) = 1;
+
+I_letter2 = I_letter - bwhitmiss(I_letter, kernel);
+I_letter2 = imdilate(I_letter2, strel('square', 5));
+
+I_skeleton = bwmorph(I_letter2,'skel', Inf);
+I_skeleton2 = bwskel(imbinarize(I_letter2)); % Binarizamos porque el bwskel no permite doubles
+
+figure('Name', 'Letters Skeleton');
+subplot(1,3,1), imshow(I), title('Original');
+subplot(1,3,2), imshow(labeloverlay(double(I_letter2),double(I_skeleton),'Transparency',0)), title('Skeleton'); 
+subplot(1,3,3), imshow(labeloverlay(double(I_letter2),double(I_skeleton2),'Transparency',0)), title('Skeleton 2');
+%Al hacer el labeloverlay pasamos a double porque no permite imagenes
+%binarizadas
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 4. Use the Hit and Miss transform to obtain the end points and the triple 
 % junctions of the skeleton. Show, in the same figure: the original skeleton,
 % the end points, the triple junctions and the combination of end points and
 %triple junctions.
+
 I_endpoints = bwmorph(I_skeleton, 'endpoints');
-I_triple_junctions = bwmorph(I_skeleton, 'triple_junctions');
-I_endpoints_triple_junctions = I_endpoints | I_triple_junctions;
+% Get the triple junctions from the skeleton
+I_triple_junctions = bwmorph(I_skeleton, 'branchpoints');
+figure('Name', 'Letters Endpoints');
+subplot(2,2,1), imshow(I_skeleton), title('Skeleton');
+subplot(2,2,2), imshow(I_endpoints), title('Endpoints');
+subplot(2,2,3), imshow(I_triple_junctions), title('Triple Junctions');
+subplot(2,2,4), imshow(I_endpoints | I_triple_junctions), title('Endpoints & Triple Junctions');
 
