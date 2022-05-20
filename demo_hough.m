@@ -99,7 +99,7 @@ label_threshold_edge.Layout.Column = 1;
 
 % Load data
 image_circuit = imread('circuit.tif');
-image_gantry = im2gray(imread('gantrycrane.png'));
+image_gantry = im2gray(imread('road.jpg'));
 
 % Image configuration
 global images;

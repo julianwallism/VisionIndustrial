@@ -256,13 +256,40 @@ P2 = houghpeaks(H2,5,'threshold',ceil(0.3*max(H2(:))));
 L2 = houghlines(BW2,T2,R2,P2,'FillGap',5,'MinLength',7);
 figure(14);
 imshow(I2), hold on;
-for k = 1:length(L2)
+for k = 1:length(Lli2)
     xy = [L2(k).point1; L2(k).point2];
     plot(xy(:,1),xy(:,2),'LineWidth',2,'Color','red');
 end
 
+%% Im1
+I1 = imread('road.jpg');
+I1 = im2double(I1);
+I1 = im2gray(I1);
 
-%% Hola
+Rho3 = 3;
+Theta_min3 = -72;
+Theta_max3 = 81;
+Npeaks3 = 7;
+Threshhold3 = 0.64;
+Threshhold_edge3 = 0.34;
+
+BW3 = edge(I1, 'Canny', Threshhold_edge3);
+[hough_value3, theta3, rho3] = hough(BW3, 'RhoResolution', Rho3, 'Theta', Theta_min3:Theta_max3);
+
+peaks3 = houghpeaks(hough_value3, Npeaks3, 'threshold', ceil(Threshhold3*max(hough_value3(:))), 'Theta', theta3);
+
+lines3 = houghlines(BW3, theta3, rho3, peaks3, 'Fillgap',3, 'MinLength',7);
+
+
+figure(15);
+imshow(I1), hold on;
+for k = 1:length(lines3)
+    xy = [lines3(k).point1; lines3(k).point2];
+    plot(xy(:,1),xy(:,2),'LineWidth',2,'Color','red');
+end
+
+
+%% Im2
 I2 = imread('chessboard.jpg');
 I2 = im2double(I2);
 I2 = im2gray(I2);
@@ -277,12 +304,14 @@ Threshhold_edge4 = 0.6;
 BW4 = edge(I2, 'Canny', Threshhold_edge4);
 [hough_value4, theta4, rho4] = hough(BW4, 'RhoResolution', Rho4, 'Theta', Theta_min4:Theta_max4);
 
-peaks4 = houghpeaks(hough_value4, Npeaks4, 'Thereshhold', ceil(Threshhold4*max(hough_value4(:))), 'Theta', theta4);
-lines4 = houghlines(BW4, theta4, rho4, Npeaks4, 'Fillgap', 5, 'MinLength',7);
+peaks4 = houghpeaks(hough_value4, Npeaks4, 'threshold', ceil(Threshhold4*max(hough_value4(:))), 'Theta', theta4);
 
-figure(15);
+lines4 = houghlines(BW4, theta4, rho4, peaks4, 'Fillgap',5, 'MinLength',7);
+
+
+figure(16);
 imshow(I2), hold on;
-for k = 1:length(L2)
+for k = 1:length(lines4)
     xy = [lines4(k).point1; lines4(k).point2];
     plot(xy(:,1),xy(:,2),'LineWidth',2,'Color','red');
 end
@@ -328,3 +357,8 @@ function imedges = zerocrossings(deriv2, T)
         end
     end 
 end
+
+% Ejercicio 3.1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
