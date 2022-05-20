@@ -206,6 +206,14 @@ end
 % means of the edge Matlab’s function, with default parameters.
 % play the results and compare them with the previous ones.
 
+figure(12);
+ImEdgZ = edge(I, "zerocross");
+ImEdgL = edge(I, "log");
+
+subplot(1,2,1), imshow(ImEdgZ), title("Zerocross with edge");
+subplot(1,2,2), imshow(ImEdgL), title("Laplacian with edge");  
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Hough Transform
@@ -227,7 +235,7 @@ BW = edge(I, 'canny');
 P = houghpeaks(H,5,'threshold',ceil(0.3*max(H(:))));
 % Lines
 L = houghlines(BW,T,R,P,'FillGap',5,'MinLength',7);
-figure(11);
+figure(13);
 imshow(I), hold on;
 for k = 1:length(L)
     xy = [L(k).point1; L(k).point2];
@@ -246,12 +254,42 @@ BW2 = edge(I2, 'canny');
 P2 = houghpeaks(H2,5,'threshold',ceil(0.3*max(H2(:))));
 % Lines
 L2 = houghlines(BW2,T2,R2,P2,'FillGap',5,'MinLength',7);
-figure(12);
+figure(14);
 imshow(I2), hold on;
 for k = 1:length(L2)
     xy = [L2(k).point1; L2(k).point2];
     plot(xy(:,1),xy(:,2),'LineWidth',2,'Color','red');
 end
+
+
+%% Hola
+I2 = imread('chessboard.jpg');
+I2 = im2double(I2);
+I2 = im2gray(I2);
+
+Rho4 = 1.4;
+Theta_min4 = -90;
+Theta_max4 = 89;
+Npeaks4 = 100;
+Threshhold4 = 0.45;
+Threshhold_edge4 = 0.6;
+
+BW4 = edge(I2, 'Canny', Threshhold_edge4);
+[hough_value4, theta4, rho4] = hough(BW4, 'RhoResolution', Rho4, 'Theta', Theta_min4:Theta_max4);
+
+peaks4 = houghpeaks(hough_value4, Npeaks4, 'Thereshhold', ceil(Threshhold4*max(hough_value4(:))), 'Theta', theta4);
+lines4 = houghlines(BW4, theta4, rho4, Npeaks4, 'Fillgap', 5, 'MinLength',7);
+
+figure(15);
+imshow(I2), hold on;
+for k = 1:length(L2)
+    xy = [lines4(k).point1; lines4(k).point2];
+    plot(xy(:,1),xy(:,2),'LineWidth',2,'Color','red');
+end
+
+
+
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
