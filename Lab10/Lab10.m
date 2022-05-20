@@ -190,10 +190,6 @@ for i = 1:4
         dist = pdist([variables(i,:);variables(j,:)]);
         avg = mean(dist);
        
-%         if std > stdAux
-%             stdAux = std;
-%             stdIndx = [i, j];
-%         end
         if avg > avgAux
             avgAux = avg;
             avgIdx = [i, j];
@@ -203,10 +199,6 @@ for i = 1:4
 end
 
 disp("best variables by maximum distance of means")
-labels(avgIdx(1))
-labels(avgIdx(2))
-
-disp("best variables by maximum standard deviation of distance of points")
 labels(avgIdx(1))
 labels(avgIdx(2))
 
