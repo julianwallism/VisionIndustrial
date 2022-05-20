@@ -66,10 +66,18 @@ end
 % image with the chessboard grid
 function out = getGrid(image)
     out = imbinarize(image);
+    % Queremos eliminar todas las 
     out = imerode(out, strel('square', 19));
     out = imfill(out, 'holes');
     out = imdilate(out, strel('square', 23));
     out = imfill(imcomplement(out), 'holes');
+    % Técnica de lincoln
+    % Hemos probado de hacer dilatación - imagen y erosion - imagen, pero
+    % los resultados quedaban muy escalonados asi que las hemos unido.
+    % Uniendolas se simplifican las imagenes y nos queda dilatacion -
+    % erosion
+     out = imdilate(out, strel('square', 41)) - imerode(out, strel('square', 41));
+
 end
 
 %% Function that given a gray scale image it returns an image showing
