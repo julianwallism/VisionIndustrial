@@ -1,73 +1,64 @@
 %%%%%%%%%%%%%%%%%
 %%  FINAL LAB  %%
 %%%%%%%%%%%%%%%%%
-%close all;
+close all;
 
-%% 
+%%
 %% Preprocess data:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% global variables
-% global kernel_HitMiss;
-% kernel_HitMiss = ones(101,101);
-% kernel_HitMiss = kernel_HitMiss*-1;
-% kernel_HitMiss(2:end-1,2:end-1) = 0;
-% kernel_HitMiss(51,51) = 1;
 % We load all the images
+expectedWPonBS = [1,1,2,1,1,2,1,2,3,1];
+expectedBP = [3,2,2,2,3,4,4,4,6,6];
 
-myFiles = dir('*.jpg'); %gets all wav files in struct
-numImages = length(myFiles); 
-for k = 1:numImages-1
-    img = (im2gray(imread(myFiles(k).name)));
-%     [out, num] = getWPonBS(img);
-%     subplot(2,5,k),imshow(out), title(num);
-    out = getGrid(img);
-    subplot(2,5,k), imshow(out), title(k)
+myFiles = dir('*.jpg'); 
+numImages = length(myFiles);
+
+for k = 1:numImages
+    img=imread(myFiles(k).name);
+    imgBin = imbinarize(im2gray(im2double(img)));
+    grid = getGrid(imgBin);
+    [wp_on_bs, numWpBs] = getWPonBS(imgBin);
+    [bp_on_ws, numBpWs] = getWPonBS(imcomplement(imgBin));
+    [bp_on_bs, numBpBs] = getBPonBS(imgBin);
+    numBp=numBpWs+numBpBs;
+
+    figure(k);
+    subplot(2,2,1), imshow(img), title("Original");
+    subplot(2,2,2), imshow(grid), title("Grid");
+    subplot(2,2,3), imshow(grid+wp_on_bs), ...
+        title("White pieces on Black squares", ...
+        "Expected: "+expectedWPonBS(k)+", got: "+numWpBs);
+    subplot(2,2,4), imshow(grid+bp_on_ws+bp_on_bs), ...
+        title("White pieces on Black squares", ...
+        "Expected: "+expectedBP(k)+", got: "+numBp);
+    
+        if numWpBs == expectedWPonBS(k)
+            result1 = "Correct ✅";
+        else
+            result1 = "Incorrect ❌";
+        end
+
+        if numBp == expectedBP(k)
+            result2 = "Correct ✅";
+        else
+            result2 = "Incorrect ❌";
+        end
+
+        fprintf("Filename: %s | Expected number of white pieces on black squares: %d | Got: %d -> %s\n", ...
+            myFiles(k).name, expectedWPonBS(k),numWpBs, result1);
+        fprintf("Filename: %s | Expected number of black pieces: %d \t\t\t\t\t| Got: %d -> %s\n\n", ...
+            myFiles(k).name, expectedBP(k), numBp, result2);
+
 end
-
-% figure(1);
-% I = im2double(im2gray(imread("ex.jpg")));
-% [centersBright, radiiBright] = imfindcircles(I,[30 60],"ObjectPolarity","bright");
-% [centersDark, radiiDark] = imfindcircles(I,[30 60],"ObjectPolarity","dark");
-% 
-% imshow(I);
-% viscircles(centersBright, radiiBright,'Color','b');
-% viscircles(centersDark, centersDark,'Color','r');
-
-
-% figure(1);
-% % images{10}= histeq(images{10});
-% imshow(images{10})
-% %     [centers, radii] = imfindcircles(images{1},[100 200]);
-% %     [centersBright, radiiBright] = imfindcircles(images{1},[100 200],'ObjectPolarity','bright');
-% [centersDark, radiiDark] = imfindcircles(images{10},[100 200],'ObjectPolarity','dark');
-% %     viscircles(centers, radii,'Color','g');
-% %     viscircles(centersBright, radiiBright,'Color','b');
-%     viscircles(centersDark, radiiDark,'Color','r');
-% end
-
-% % Lets see the grayscale images and their histograms
-% figure('Name','Original Images');
-% for k = 1:numImages
-%     subplot(2,5,k), imshow(images{k}), title(sprintf('Image %d', k));
-% end
-% 
-% figure('Name','Images Histogram');
-% for k = 1:numImages
-%     subplot(2,5,k), imhist(images{k}), title(sprintf('Image %d', k));
-% end
-
-
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Functions
 
-%% Function that given a grayscale image, returns a binarized 
+%% Function that given a grayscale image, returns a binarized
 % image with the chessboard grid
 function out = getGrid(image)
-    out = imbinarize(image);
-    % Queremos eliminar todas las 
-    out = imerode(out, strel('square', 19));
+    % Queremos eliminar todas las
+    out = imerode(image, strel('square', 19));
     out = imfill(out, 'holes');
     out = imdilate(out, strel('square', 23));
     out = imfill(imcomplement(out), 'holes');
@@ -76,54 +67,71 @@ function out = getGrid(image)
     % los resultados quedaban muy escalonados asi que las hemos unido.
     % Uniendolas se simplifican las imagenes y nos queda dilatacion -
     % erosion
-     out = imdilate(out, strel('square', 41)) - imerode(out, strel('square', 41));
-
+    out = imdilate(out, strel('square', 21)) - imerode(out, strel('square', 21));
 end
 
 %% Function that given a gray scale image it returns an image showing
 % the white pieces on the black squares and the number of these
 function [out, num] = getWPonBS(image)
-    out = imbinarize(image);
     
     % erosionamos para asegurar que las casillas negras sean conexas y
     % quitar pixeles blancos
-      out = imerode(out, strel('square',19));
-      % Hacemos un imfill para quitar las piezas que estan sobre casillas
-      % blancas, tanto las piezas negras sobre casillas blancas como las
-      % sombras de las propias casillas negras
-      out = imfill(out, 'holes');
-     % Quitamos reflejos de las piezas negras sobre fondo negro para
-     % quedarnos solo con las piezas blancas sobre fondo negro
-     out = imopen(out, strel('square',51));
-     % Sabiendo el rango de numero de pixeles de los cuadrados blancos los
-     % podemos eliminar sin tocar las piezas blancas
-     out = out - bwareafilt(out,[110000 135000]);
-%     % Perfilamos las piezas blancas
-     out = imdilate(out, strel('disk', 21));
-
+    out = imerode(image, strel('square',17));
+    % Hacemos un imfill para quitar las piezas que estan sobre casillas
+    % blancas, tanto las piezas negras sobre casillas blancas como las
+    % sombras de las propias casillas negras
+    out = imfill(out, 'holes');
+    % Quitamos reflejos de las piezas negras sobre fondo negro para
+    % quedarnos solo con las piezas blancas sobre fondo negro
+    out = imopen(out, strel('square',51));
+    % Sabiendo el rango de numero de pixeles de los cuadrados blancos los
+    % podemos eliminar sin tocar las piezas blancas
+    out = out - bwareafilt(out,[110000 135000]);
+    %     % Perfilamos las piezas blancas
+    out = imdilate(out, strel('disk', 21));
+    
     [~,num]=bwlabel(out);
     %create a kernel of zeros with -1 in the borders and 1 in the center
 end
 
-%% Function that given a gray scale image it returns an image showing the
-% black pieces and number of these.
-function [out, num] = getBP(image)
-    global kernel_HitMiss
-    out = imadjust(image);
-    out = imbinarize(out);
-    out = imdilate(out,strel('disk', 5));
-    out = imdilate(out,strel('disk', 5));
-%     area = regionprops(out, "Area");
-    out = out - bwareafilt(out,[50000 80000]) ;
-%     out = imdilate(out, strel('square', 20));
-%     out = imclose(out,strel('square',25));
-%     out = imopen(out, strel('disk',9));
-%     out = imclose(out, strel('square',9));
-%     out = out - bwhitmiss(out, kernel_HitMiss);
-%     out = imcomplement(out);
-%     out = imfill(out, 'holes');
-%     out = imcomplement(out);
-%         out = imerode(out, strel('square', 3));
+%% Function that given a gray scale image it returns an image showing
+% the white pieces on the black squares and the number of these
+function [out, num] = getBPonBS(image)
+    out = imdilate(image, strel('square', 25));
+    out = imcomplement(out);
+    out = logical(out-bwareafilt(out,[35000 100000]));
+    out = imcomplement(out);
+    out = out - bwareafilt(out, [4900000 5400000]);
+    % put zeros on the border
+    out(1:25,:) = 0;
+    out(end-25:end,:) = 0;
+    out(:,1:25) = 0;
+    out(:,end-25:end) = 0;
+
+    out= imdilate(out, strel('disk', 11));
     [~,num]=bwlabel(out);
-    num = num-32;
 end
+
+function gridHough(I)
+    I = getGrid(I);
+    BW = edge(I, 'canny', 0.0001,0.31);
+    [H,T,R] = hough(BW);
+    P = houghpeaks(H,22);
+    L = houghlines(BW,T,R,P,'MinLength',50);
+    figure(16);
+    imshow(I), hold on;
+    for k = 1:length(L)
+        xy = [L(k).point1; L(k).point2];
+        plot(xy(:,1),xy(:,2),'LineWidth',3,'Color','red');
+    end
+end
+
+
+
+
+
+
+
+
+
+
