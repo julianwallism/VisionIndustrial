@@ -3,7 +3,6 @@
 %%%%%%%%%%%%%%%%%
 close all;
 
-%%
 %% Preprocess data:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % We load all the images
@@ -12,26 +11,28 @@ expectedBP = [3,2,2,2,3,4,4,4,6,6];
 
 myFiles = dir('*.jpg'); 
 numImages = length(myFiles);
-
+ 
 for k = 1:numImages
     img=imread(myFiles(k).name);
     imgBin = imbinarize(im2gray(im2double(img)));
+
+    tic;
     grid = getGrid(imgBin);
     [wp_on_bs, numWpBs] = getWPonBS(imgBin);
     [bp_on_ws, numBpWs] = getWPonBS(imcomplement(imgBin));
     [bp_on_bs, numBpBs] = getBPonBS(imgBin);
     numBp=numBpWs+numBpBs;
+    tiempo = toc;   
 
-    figure(k);
+    figure('units','normalized','outerposition',[0 0 1 1]);
     subplot(2,2,1), imshow(img), title("Original");
     subplot(2,2,2), imshow(grid), title("Grid");
     subplot(2,2,3), imshow(grid+wp_on_bs), ...
-        title("White pieces on Black squares", ...
-        "Expected: "+expectedWPonBS(k)+", got: "+numWpBs);
+        title("White Pieces on Black squares, Expected: "+expectedWPonBS(k)+", got: "+numWpBs);
     subplot(2,2,4), imshow(grid+bp_on_ws+bp_on_bs), ...
-        title("White pieces on Black squares", ...
-        "Expected: "+expectedBP(k)+", got: "+numBp);
-    
+        title("White pieces on Black squares, Expected: "+expectedBP(k)+", got: "+numBp);
+    drawnow;
+
         if numWpBs == expectedWPonBS(k)
             result1 = "Correct ✅";
         else
@@ -46,11 +47,12 @@ for k = 1:numImages
 
         fprintf("Filename: %s | Expected number of white pieces on black squares: %d | Got: %d -> %s\n", ...
             myFiles(k).name, expectedWPonBS(k),numWpBs, result1);
-        fprintf("Filename: %s | Expected number of black pieces: %d \t\t\t\t\t| Got: %d -> %s\n\n", ...
+        fprintf("Filename: %s | Expected number of black pieces: %d \t\t\t\t\t| Got: %d -> %s\n", ...
             myFiles(k).name, expectedBP(k), numBp, result2);
-
+        fprintf("Filename: %s | Time spent: %.3d \n\n", myFiles(k).name, tiempo);
 end
 
+tiempo = toc
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Functions
 
@@ -102,7 +104,8 @@ function [out, num] = getBPonBS(image)
     out = logical(out-bwareafilt(out,[35000 100000]));
     out = imcomplement(out);
     out = out - bwareafilt(out, [4900000 5400000]);
-    % put zeros on the border
+    % Ponemos un marco de ceros en la imagen para eliminar imperfecciones
+    % que no se pueden eliminar con un 
     out(1:25,:) = 0;
     out(end-25:end,:) = 0;
     out(:,1:25) = 0;
@@ -112,19 +115,19 @@ function [out, num] = getBPonBS(image)
     [~,num]=bwlabel(out);
 end
 
-function gridHough(I)
-    I = getGrid(I);
-    BW = edge(I, 'canny', 0.0001,0.31);
-    [H,T,R] = hough(BW);
-    P = houghpeaks(H,22);
-    L = houghlines(BW,T,R,P,'MinLength',50);
-    figure(16);
-    imshow(I), hold on;
-    for k = 1:length(L)
-        xy = [L(k).point1; L(k).point2];
-        plot(xy(:,1),xy(:,2),'LineWidth',3,'Color','red');
-    end
-end
+% function gridHough(I)
+%     I = getGrid(I);
+%     BW = edge(I, 'canny', 0.0001,0.31);
+%     [H,T,R] = hough(BW);
+%     P = houghpeaks(H,22);
+%     L = houghlines(BW,T,R,P,'MinLength',50);
+%     figure(16);
+%     imshow(I), hold on;
+%     for k = 1:length(L)
+%         xy = [L(k).point1; L(k).point2];
+%         plot(xy(:,1),xy(:,2),'LineWidth',3,'Color','red');
+%     end
+% end
 
 
 
