@@ -216,14 +216,18 @@ BW = edge(I, 'canny');
 P = houghpeaks(H,5,'threshold',ceil(0.3*max(H(:))));
 L = houghlines(BW,T,R,P,'FillGap',5,'MinLength',7);
 
-I2 = imread('chessboard.jpg');
-I2 = im2double(I2);
-I2 = im2gray(I2);
+matdims 
 
-BW2 = edge(I2, 'canny');
-[H2,T2,R2] = hough(BW2);
-P2 = houghpeaks(H2,5,'threshold',ceil(0.3*max(H2(:))));
-L2 = houghlines(BW2,T2,R2,P2,'FillGap',5,'MinLength',7);
+
+
+% I2 = imread('chessboard.jpg');
+% I2 = im2double(I2);
+% I2 = im2gray(I2);
+% 
+% BW2 = edge(I2, 'canny');
+% [H2,T2,R2] = hough(BW2);
+% P2 = houghpeaks(H2,5,'threshold',ceil(0.3*max(H2(:))));
+% L2 = houghlines(BW2,T2,R2,P2,'FillGap',5,'MinLength',7);
 
 
 
