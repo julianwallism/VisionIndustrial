@@ -232,6 +232,13 @@ matdims
 
 
 
+% Calculate the euclidian distance between the points of the lines
+% dist = pdist([L.point1;L.point2]);
+% avg = mean(dist);
+% std = std(dist);
+%
+
+
 
 function out = houghlines2mat(matdims, lines)
     out = zeros(matdims(1), matdims(2));
