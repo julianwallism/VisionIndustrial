@@ -216,7 +216,6 @@ BW = edge(I, 'canny');
 P = houghpeaks(H,5,'threshold',ceil(0.3*max(H(:))));
 L = houghlines(BW,T,R,P,'FillGap',5,'MinLength',7);
 
-matdims 
 
 
 
@@ -229,25 +228,32 @@ matdims
 % P2 = houghpeaks(H2,5,'threshold',ceil(0.3*max(H2(:))));
 % L2 = houghlines(BW2,T2,R2,P2,'FillGap',5,'MinLength',7);
 
+matdims = size(I);
 
+houghlines2mat(matdims, L);
 
-
-% Calculate the euclidian distance between the points of the lines
-% dist = pdist([L.point1;L.point2]);
-% avg = mean(dist);
-% std = std(dist);
-%
-
-
-
-function out = houghlines2mat(matdims, lines)
+function houghlines2mat(matdims, lines)
     out = zeros(matdims(1), matdims(2));
+    d = zeros(size(lines));
+    angles = zeros(size(lines));
     for i = 1:size(lines, 1)
-      m2 = bla;
-      p =[lines(i).point1, lines(i).point2];
-      val = 1;
-      out = locate(out, m2, p, val);
+      %p =[lines(i).point1, lines(i).point2];
+      %d(i) = pdist([lines(i).point1(1),lines(i).point1(2); lines(i).point2(1), lines(i).point2(2)]);
+      X = [lines(i).point1(1),lines(i).point1(2)];
+      Y = [lines(i).point2(1), lines(i).point2(2)];
+      d(i) = norm(X - Y);
+        
+      opposite = lines(i).point2(2) - lines(i).point1(2);
+      adyacent = lines(i).point2(1) - lines(i).point1(1);
+
+      angles(i) = rad2deg(atan(opposite / adyacent));
+
+      SE = strel('line', d(i), angles(i));
+        
+      out = insert_elem(out, SE.Neighborhood, lines(i).point1, 1);
+      
     end
+    imshow(out);
 end
 
 function out = insert_elem(m1, m2, p, val)
