@@ -38,7 +38,6 @@ subplot(1,2,2), imshow(Gy), title('Gy');
 %% 4. Compute the magnitude of the gradient at each point using the
 % above-mentioned approximation and display the final magnitude image.
 
-Gz = zeros(size(I));
 Gz = sqrt(Gx.^2 + Gy.^2);
 
 figure(3);
@@ -55,8 +54,9 @@ for i = 1:9
     Gz_thresh(Gz_thresh < thresh) = 0;
     Gz_thresh(Gz_thresh >= thresh) = 1;
 
-    subplot(3,3,i),imshow(Gz_thresh), title("Gz thresh "+i);
+    subplot(3,3,i),imshow(Gz_thresh), title("Gz thresh "+i/10);
 end
+% El mejor umbral está entorno el 0.6
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 6. Using the edge Matlab’s function, compute the edges of the image
@@ -90,7 +90,7 @@ end
 
 % En primer lugar, hicimos pruebas con threshholds intentando encontrar a
 % partir de que umbral los  operadores eran más eficaces. Encontramos que
-% con el valor dle umbral 0.25 ya apenas se observaba nada en las imágenes,
+% con el valor del umbral 0.25 ya apenas se observaba nada en las imágenes,
 % por lo que hicimos una nueva prueba con valores mucho más bajos, en este
 % caso 0.05, 0.10 y 0.15.
 
@@ -106,14 +106,6 @@ end
 % ninguna diferencia significativa. Ambos son los que parecen tener menos
 % líneas de detección, esto es más notable con el valor de 0.15. Lo cual
 % tiene sentido porque parecen menos susceptibles al ruido.
-
-% Comparacion:
-% Ventajas de Sobel:
-%   - Es 
-% Ventajas de Prewitt:
-%   - Es
-% Ventajas de Roberts:
-%   - Es
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 7. Apply the Canny edge detector to the image using the default
@@ -135,7 +127,7 @@ end
 
 % El método de Canny aplica dos umbrales al gradiente: un umbral alto
 % (baja sensibilidad de detección) y un umbral bajo (alta sensibilidad de 
-% detección). dge comienza con el resultado de baja sensibilidad y, 
+% detección). Edge comienza con el resultado de baja sensibilidad y, 
 % después, lo expande hasta incluir los píxeles de los bordes conectados 
 % del resultado de alta sensibilidad. Esto contribuye a llenar los posibles
 % huecos en los bordes detectados.
@@ -156,6 +148,7 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 2. Reload and display the image house.jpg.
 I = imread('house.jpg');
+I = im2double(I);
 figure(8);
 imshow(I);
 
@@ -171,11 +164,11 @@ deriv2 = imfilter(I, fspecial('laplacian'));
 
 figure(9);
 for i = 1:9
-    thresh = i/10;
-    imedges=zerocrossings(deriv2, thresh);
-    subplot(3,3,i),imshow(imedges), title("imedges "+i);
+    thresh = 0.15 + i/50;
+    imedges = zerocrossings(deriv2, thresh);
+    subplot(3,3,i), imshow(imedges), title("imedges "+thresh);
 end
-
+% El mejor umbral está entorno al 0.29
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 5. Compute the second-order derivative of the image using a LoG filter of
 % size 13x13 and sigma 2.0. Display the results.
@@ -186,7 +179,7 @@ deriv2 = imfilter(I, filter);
 
 figure(10);
 subplot(1,2,1), imshow(deriv2), title('deriv2');
-subplot(1,2,2), imshow(im2bw(deriv2)), title('im2bw(deriv2)');
+subplot(1,2,2), imshow(imbinarize(deriv2)), title('imbinarize(deriv2)');
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 6. Compute the edges of the image using the derivative obtained in the
@@ -195,11 +188,11 @@ subplot(1,2,2), imshow(im2bw(deriv2)), title('im2bw(deriv2)');
 
 figure(11);
 for i = 1:9
-    thresh = i/10;
+    thresh = i/1000;
     imedges=zerocrossings(deriv2, thresh);
-    subplot(3,3,i),imshow(imedges), title("imedges "+i);
+    subplot(3,3,i),imshow(imedges), title("imedges "+thresh);
 end
-
+% El mejor umbral está en torno al 0.009
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 7. Compute the edges of the image using the two previous operators by 
@@ -225,16 +218,15 @@ subplot(1,2,2), imshow(ImEdgL), title("Laplacian with edge");
 % following figure:
 
 I = imread('road.jpg');
-I = im2double(I);
 I = im2gray(I);
 
-BW = edge(I, 'sobel', 'vertical');
+BW = edge(I, 'sobel', [], 'vertical');
 % Hough matrix
 [H,T,R] = hough(BW);
 % Peaks
-P = houghpeaks(H,6,'threshold',ceil(0.3*max(H(:))));
+P = houghpeaks(H,6);
 % Lines
-L = houghlines(BW,T,R,P,'FillGap',5,'MinLength',7);
+L = houghlines(BW,T,R,P);
 figure(13);
 imshow(I), hold on;
 for k = 1:length(L)
@@ -251,9 +243,9 @@ BW2 = edge(I2, 'canny', [0.01,0.31]);
 % Hough matrix
 [H2,T2,R2] = hough(BW2);
 % Peaks
-P2 = houghpeaks(H2,22,'threshold',ceil(0.3*max(H2(:))));
+P2 = houghpeaks(H2,22);
 % Lines
-L2 = houghlines(BW2,T2,R2,P2,'FillGap',5,'MinLength',7);
+L2 = houghlines(BW2,T2,R2,P2);
 figure(14);
 imshow(I2), hold on;
 for k = 1:length(L2)
@@ -261,78 +253,18 @@ for k = 1:length(L2)
     plot(xy(:,1),xy(:,2),'LineWidth',2,'Color','red');
 end
 
-%% Im1
-I1 = imread('road.jpg');
-I1 = im2double(I1);
-I1 = im2gray(I1);
-
-Rho3 = 3;
-Theta_min3 = -72;
-Theta_max3 = 81;
-Npeaks3 = 6;
-Threshhold3 = 0.64;
-Threshhold_edge3 = 0.34;
-
-BW3 = edge(I1, 'sobel', 'vertical');
-[hough_value3, theta3, rho3] = hough(BW3, 'RhoResolution', Rho3, 'Theta', Theta_min3:Theta_max3);
-
-peaks3 = houghpeaks(hough_value3, Npeaks3, 'threshold', ceil(Threshhold3*max(hough_value3(:))), 'Theta', theta3);
-
-lines3 = houghlines(BW3, theta3, rho3, peaks3, 'Fillgap',3, 'MinLength',7);
-
-
-figure(15);
-imshow(I1), hold on;
-for k = 1:length(lines3)
-    xy = [lines3(k).point1; lines3(k).point2];
-    plot(xy(:,1),xy(:,2),'LineWidth',2,'Color','red');
-end
-
-
-%% Im2
-I2 = imread('chessboard.jpg');
-I2 = im2double(I2);
-I2 = im2gray(I2);
-
-Rho4 = 1.4;
-Theta_min4 = -90;
-Theta_max4 = 89;
-Npeaks4 = 22;
-Threshhold4 = 0.45;
-Threshhold_edge4 = 0.6;
-
-BW4 = edge(I2, 'Canny', [0.01, 0.31]);
-[hough_value4, theta4, rho4] = hough(BW4, 'RhoResolution', Rho4, 'Theta', Theta_min4:Theta_max4);
-
-peaks4 = houghpeaks(hough_value4, Npeaks4, 'threshold', ceil(Threshhold4*max(hough_value4(:))), 'Theta', theta4);
-
-lines4 = houghlines(BW4, theta4, rho4, peaks4, 'Fillgap',5, 'MinLength',7);
-
-
-figure(16);
-imshow(I2), hold on;
-for k = 1:length(lines4)
-    xy = [lines4(k).point1; lines4(k).point2];
-    plot(xy(:,1),xy(:,2),'LineWidth',2,'Color','red');
-end
-
-
-
-
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Funciones %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Ejercicio 1.1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% CP
 function[Gx, Gy] = gradients(img)
-    Gx = imfilter(img, fspecial('sobel'), 'conv');
-    Gy = imfilter(img, fspecial('sobel'), 'conv');
+    sobel = fspecial('sobel');
+    Gx = imfilter(img, sobel, 'conv');
+    Gy = imfilter(img, sobel', 'conv');
 end
 
 % Ejercicio 2.1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% CP
 function imedges = zerocrossings(deriv2, T)
-% Zero-crossings
     [rows, cols]=size(deriv2);
     imedges = false(size(deriv2));
     for i = 1:rows-1
@@ -341,7 +273,7 @@ function imedges = zerocrossings(deriv2, T)
             dcol=0.0;
             a = deriv2(i,j);
             b = deriv2(i+1,j);
-            c = deriv2(i,j +1);
+            c = deriv2(i,j+1);
          
             if((a >= 0 && b < 0) || (a < 0 && b >= 0))
                 drow = abs(a-b);
@@ -357,8 +289,6 @@ function imedges = zerocrossings(deriv2, T)
         end
     end 
 end
-
-% Ejercicio 3.1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 

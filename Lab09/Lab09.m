@@ -31,8 +31,7 @@ subplot(2,2,2), imshow(I5), title('Eroded 5');
 subplot(2,2,3), imshow(I10), title('Eroded 10');
 subplot(2,2,4), imshow(I20), title('Eroded 20');
 
-% The erosion operation is used to remove the small features in the image.
-
+% La erosión se usa para eliminar objetos pequeños de la imagen
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 3. Write a code to automatically count the number of circles in the 
@@ -61,6 +60,7 @@ I = imbinarize(I);
 
 figure('Name', 'Text');
 imshow(I), title('Text');
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 5. Improve the quality of the text using a dilation operation. Perform 
 % the operation using several structuring elements available in the strel
@@ -115,11 +115,11 @@ subplot(1,3,3), imshow(boundaries), title("Dilatation - Erosion");
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 1. Load the image shapes.jpg  and apply a threshold in order to obtain 
 %% a binary image
-I = imread('shapes.jpg');
-I = im2double(I);
-I = im2gray(I);
+I = im2gray(im2double(imread('shapes.jpg')));
+
 threshold = graythresh(I);
 I = imbinarize(I, threshold);
+
 figure('Name', 'Shapes');
 imshow(I), title('Shapes');
 
@@ -138,11 +138,8 @@ subplot(2,2,2), imshow(I_19), title('Opening 19');
 subplot(2,2,3), imshow(I_23), title('Opening 23');
 subplot(2,2,4), imshow(I_27), title('Opening 27');
 
-% CP
 % Como podemos ver el opening elimina los objetos mas pequeños que no
-% cumplen con las condiciones de la estructura. Por ejemplo, el opening de
-% una imagen con una figura de 3x3, elimina el objeto que no cumpla con las
-% condiciones de la estructura. 
+% cumplen con las condiciones de la estructura. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 3. Perform closing operations using squares of different sizes as 
@@ -159,11 +156,9 @@ subplot(2,2,2), imshow(I_19), title('Closing 19');
 subplot(2,2,3), imshow(I_23), title('Closing 23');
 subplot(2,2,4), imshow(I_27), title('Closing 27');
 
-%CP
-% Como podemos ver el closing elimina los objetos mas grandes que no
-% cumplen con las condiciones de la estructura. Por ejemplo, el closing de
-% una imagen con una figura de 3x3, elimina el objeto que no cumpla con las
-% condiciones de la estructura.
+
+% Como podemos ver el closing elimina los agujeros mas pequeños que no
+% cumplen con las condiciones de la estructura.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 4. Load the image fingerprint.jpg and apply a threshold in order to 
@@ -210,9 +205,7 @@ subplot(3,2,6), imshow(I_OC_Cross_3), title('OC Cross 3');
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 1. Load the image letters2.jpg. Apply a threshold in order to obtain a binary image.
-I = imread('letters2.jpg');
-I = im2double(I);
-I = im2gray(I);
+I = im2gray(im2double(imread('letters2.jpg')));
 threshold = graythresh(I);
 I = imbinarize(I, threshold);
 figure('Name', 'Letters');
@@ -277,9 +270,7 @@ subplot(2,3,5), imshow(I_closing_G4), title('Closing G4');
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 3. Compute the skeleton only for the letters present in the image and 
 % display, in the same figure, the original image and the results.
-I_letter = imerode(I, strel('square', 5)); 
-% I_letter = imclose(I_letter, strel('square', 3)); 
-% I_letter = imdilate(I_letter, strel('square', 7)); 
+I_letter = imerode(I, strel('square', 5));  
 kernel = zeros(23,23);
 
 % -1 in kernels borders
@@ -309,7 +300,6 @@ subplot(1,3,3), imshow(labeloverlay(double(I_letter2),double(I_skeleton2),'Trans
 %triple junctions.
 
 I_endpoints = bwmorph(I_skeleton, 'endpoints');
-% Get the triple junctions from the skeleton
 I_triple_junctions = bwmorph(I_skeleton, 'branchpoints');
 figure('Name', 'Letters Endpoints');
 subplot(2,2,1), imshow(I_skeleton), title('Skeleton');
