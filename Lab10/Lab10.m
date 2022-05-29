@@ -216,6 +216,13 @@ BW = edge(I, 'canny');
 P = houghpeaks(H,5,'threshold',ceil(0.3*max(H(:))));
 L = houghlines(BW,T,R,P,'FillGap',5,'MinLength',7);
 
+figure(1);
+imshow(I), hold on;
+for k = 1:length(L)
+    xy = [L(k).point1; L(k).point2];
+    plot(xy(:,1),xy(:,2),'LineWidth',2,'Color','red');
+end
+
 
 
 
@@ -230,29 +237,36 @@ L = houghlines(BW,T,R,P,'FillGap',5,'MinLength',7);
 
 matdims = size(I);
 
-houghlines2mat(matdims, L);
+[out, strels] = houghlines2mat(matdims, L);
 
-function houghlines2mat(matdims, lines)
+function [out, strels] = houghlines2mat(matdims, lines)
     out = zeros(matdims(1), matdims(2));
     d = zeros(size(lines));
     angles = zeros(size(lines));
-    for i = 1:size(lines, 1)
+    strels = {}
+    for i = 1:size(lines, 2)
       %p =[lines(i).point1, lines(i).point2];
       %d(i) = pdist([lines(i).point1(1),lines(i).point1(2); lines(i).point2(1), lines(i).point2(2)]);
       X = [lines(i).point1(1),lines(i).point1(2)];
       Y = [lines(i).point2(1), lines(i).point2(2)];
       d(i) = norm(X - Y);
+      fprintf('%d \n', d(i));
+
         
       opposite = lines(i).point2(2) - lines(i).point1(2);
       adyacent = lines(i).point2(1) - lines(i).point1(1);
 
       angles(i) = rad2deg(atan(opposite / adyacent));
+      %fprintf('%d \n', angles(i));
 
       SE = strel('line', d(i), angles(i));
+      strels{i}=SE;
         
+      
       out = insert_elem(out, SE.Neighborhood, lines(i).point1, 1);
       
     end
+    figure(2);
     imshow(out);
 end
 
