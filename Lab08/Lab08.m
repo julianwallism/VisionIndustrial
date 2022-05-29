@@ -228,11 +228,11 @@ I = imread('road.jpg');
 I = im2double(I);
 I = im2gray(I);
 
-BW = edge(I, 'canny');
+BW = edge(I, 'sobel', 'vertical');
 % Hough matrix
 [H,T,R] = hough(BW);
 % Peaks
-P = houghpeaks(H,5,'threshold',ceil(0.3*max(H(:))));
+P = houghpeaks(H,6,'threshold',ceil(0.3*max(H(:))));
 % Lines
 L = houghlines(BW,T,R,P,'FillGap',5,'MinLength',7);
 figure(13);
@@ -247,16 +247,16 @@ I2 = imread('chessboard.jpg');
 I2 = im2double(I2);
 I2 = im2gray(I2);
 
-BW2 = edge(I2, 'canny');
+BW2 = edge(I2, 'canny', [0.01,0.31]);
 % Hough matrix
 [H2,T2,R2] = hough(BW2);
 % Peaks
-P2 = houghpeaks(H2,5,'threshold',ceil(0.3*max(H2(:))));
+P2 = houghpeaks(H2,22,'threshold',ceil(0.3*max(H2(:))));
 % Lines
 L2 = houghlines(BW2,T2,R2,P2,'FillGap',5,'MinLength',7);
 figure(14);
 imshow(I2), hold on;
-for k = 1:length(Lli2)
+for k = 1:length(L2)
     xy = [L2(k).point1; L2(k).point2];
     plot(xy(:,1),xy(:,2),'LineWidth',2,'Color','red');
 end
@@ -269,11 +269,11 @@ I1 = im2gray(I1);
 Rho3 = 3;
 Theta_min3 = -72;
 Theta_max3 = 81;
-Npeaks3 = 7;
+Npeaks3 = 6;
 Threshhold3 = 0.64;
 Threshhold_edge3 = 0.34;
 
-BW3 = edge(I1, 'Canny', Threshhold_edge3);
+BW3 = edge(I1, 'sobel', 'vertical');
 [hough_value3, theta3, rho3] = hough(BW3, 'RhoResolution', Rho3, 'Theta', Theta_min3:Theta_max3);
 
 peaks3 = houghpeaks(hough_value3, Npeaks3, 'threshold', ceil(Threshhold3*max(hough_value3(:))), 'Theta', theta3);
@@ -297,11 +297,11 @@ I2 = im2gray(I2);
 Rho4 = 1.4;
 Theta_min4 = -90;
 Theta_max4 = 89;
-Npeaks4 = 100;
+Npeaks4 = 22;
 Threshhold4 = 0.45;
 Threshhold_edge4 = 0.6;
 
-BW4 = edge(I2, 'Canny', Threshhold_edge4);
+BW4 = edge(I2, 'Canny', [0.01, 0.31]);
 [hough_value4, theta4, rho4] = hough(BW4, 'RhoResolution', Rho4, 'Theta', Theta_min4:Theta_max4);
 
 peaks4 = houghpeaks(hough_value4, Npeaks4, 'threshold', ceil(Threshhold4*max(hough_value4(:))), 'Theta', theta4);
