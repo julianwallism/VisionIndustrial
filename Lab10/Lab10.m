@@ -23,7 +23,7 @@ subplot(1,2,2), imhist(I), title('Histogram');
 % Hemos aprovechado que la imagen está en RGB para hacer diferentes pruebas
 % basandonos en los tres canales de la imagen para ver si alguno de ellos
 % es mejor respecto a los otros. En este caso el mejor es el canal azul
-
+ 
 blueChannel = I_original(:,:,3); % blue channel
 
 I = im2gray(im2double(blueChannel));
@@ -201,73 +201,71 @@ end
 fprintf("Las mejores features basandonos en mayor distancia de medias son: %s y %s", labels(avgIdx(1)), labels(avgIdx(2)));
 
 
-
-%% function that given the dimension of an image and the houghlines of the original 
-% image, it inserts the lines as 1s and 0s in a new image
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Coge las houghlines de las imagenes road y chessboard, y plasmalas en 
+% una imagen negra.
 
 I = imread('road.jpg');
 I = im2double(I);
 I = im2gray(I);
 
-BW = edge(I, 'canny');
+BW = edge(I, 'sobel',[],'vertical');
 [H,T,R] = hough(BW);
-P = houghpeaks(H,5,'threshold',ceil(0.3*max(H(:))));
-L = houghlines(BW,T,R,P,'FillGap',5,'MinLength',7);
-
-figure(1);
-imshow(I), hold on;
-for k = 1:length(L)
-    xy = [L(k).point1; L(k).point2];
-    plot(xy(:,1),xy(:,2),'LineWidth',2,'Color','red');
-end
-
-
-
-
-% I2 = imread('chessboard.jpg');
-% I2 = im2double(I2);
-% I2 = im2gray(I2);
-% 
-% BW2 = edge(I2, 'canny');
-% [H2,T2,R2] = hough(BW2);
-% P2 = houghpeaks(H2,5,'threshold',ceil(0.3*max(H2(:))));
-% L2 = houghlines(BW2,T2,R2,P2,'FillGap',5,'MinLength',7);
+P = houghpeaks(H,6);
+L1 = houghlines(BW,T,R,P);
 
 matdims = size(I);
 
-[out, strels] = houghlines2mat(matdims, L);
+I2 = imread('chessboard.jpg');
+I2 = im2double(I2);
+I2 = im2gray(I2);
 
-function [out, strels] = houghlines2mat(matdims, lines)
+figure()
+BW2 = edge(I2, 'canny',[0.01 0.31]);
+[H2,T2,R2] = hough(BW2);
+P2 = houghpeaks(H2,22);
+L2 = houghlines(BW2,T2,R2,P2);
+
+matdims2 = size(I2);
+
+out_road = houghlines(matdims, L);
+out_chess = houghlines(matdims2, L2);
+figure('Name','houghlines2mat');
+subplot(1,2,1), imshow(out_chess), title("Chess");
+subplot(1,2,2), imshow(out_road), title("Road");
+% Como podemos ver hay algunas lineas que no siguen el ángulo de los dos
+% puntos del houghlines, esto pensamos que se debe a la manera del strel a
+% hacer las lineas.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% insert them as 1’s into a matrix of 0’s of the same dimensions as the original image
+function out = houghlines2mat(matdims, lines)
     out = zeros(matdims(1), matdims(2));
-    d = zeros(size(lines));
-    angles = zeros(size(lines));
-    strels = {}
+
     for i = 1:size(lines, 2)
-      %p =[lines(i).point1, lines(i).point2];
-      %d(i) = pdist([lines(i).point1(1),lines(i).point1(2); lines(i).point2(1), lines(i).point2(2)]);
-      X = [lines(i).point1(1),lines(i).point1(2)];
-      Y = [lines(i).point2(1), lines(i).point2(2)];
-      d(i) = norm(X - Y);
-      fprintf('%d \n', d(i));
+      X = [lines(i).point1(1), lines(i).point2(1)];
+      Y = [lines(i).point1(2), lines(i).point2(2)];
 
-        
-      opposite = lines(i).point2(2) - lines(i).point1(2);
-      adyacent = lines(i).point2(1) - lines(i).point1(1);
+      adyacente = X(2) - X(1);
+      opuesto = Y(2) - Y(1);
 
-      angles(i) = rad2deg(atan(opposite / adyacent));
-      %fprintf('%d \n', angles(i));
-
-      SE = strel('line', d(i), angles(i));
-      strels{i}=SE;
-        
-      
-      out = insert_elem(out, SE.Neighborhood, lines(i).point1, 1);
+      angulo = -atan(opuesto/adyacente) * 180/pi; 
+      distancia = sqrt(opuesto^2 + adyacente^2);
+      SE = strel('line', distancia, angulo);
+      if Y(1) > Y(2)
+            posicion = [Y(1) + opuesto, X(1)];
+      else
+            posicion = [Y(1), X(1)];
+      end
+      out = insert_elem(out, SE.Neighborhood, posicion, 1);
       
     end
-    figure(2);
-    imshow(out);
 end
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Function that inserts a matrix in another matrix given a position and the 
+% elements of the second matrix to be inserted
 function out = insert_elem(m1, m2, p, val)
     [r,c] = size(m2);
     [r1,c1] = size(m1);
