@@ -1,0 +1,41 @@
+Quienes somos?
+	
+Enfoque general de la solución
+	Opereciones morfológicas 
+		imerode
+		imdilate
+		imopen
+
+		imfill (quitar agujeros)
+		bwareafilt (quitar objetos blancos)
+
+	im2gray para pasar a grayscale 
+	imbinarize (threshold)
+
+	imresize (optimizar)
+		4seg por imagen a 0.25seg
+
+	imcomplement
+
+
+	3 problemas
+	encontrar el tablero
+	las piezas blancas sobre casillas negras
+		(piezas sobre casillas de distinto color) por eso hemos usado el complementario
+	
+	piezas negras
+			
+Mostrar código
+	for principal
+	
+
+Explicar las 3 funciones solo con las imágenes
+
+
+Joan: Tablero Piezas blancas sobre casillas negras
+Wallis: Presentación y piezas negras.
+	
+		
+
+		
+		

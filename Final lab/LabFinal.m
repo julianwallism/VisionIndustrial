@@ -62,9 +62,9 @@ fprintf("Medium time spent per image: %s seconds\n\n", num2str(tiempoTotal/numIm
 %% Function that given a grayscale image, returns a binarized
 % image with the chessboard grid.
 
-% El algoritmoque usamos para sacar el tablero de la imagen es muy sencillo
+% El algoritmo que usamos para sacar el tablero de la imagen es muy sencillo
 % Nuestro sistema se basa en eliminar todas las piezas del tablero y luego
-% mediante una dilatación y una erosion sacar la delineación del tablero
+% mediante una dilatación y una erosión sacar la delineación del tablero.
 function out = getGrid(image)
     % Primero eliminaremos las piezas sobre casillas blancas. Para hacer
     % esto erosionamos la imagen para que las casillas negras estén
