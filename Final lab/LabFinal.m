@@ -94,7 +94,7 @@ function out = getGrid(image)
     % la transformada de Hough que a veces puede ser díficil encontrar unos
     % parámetros buenos.
 
-    % Hemos probado de hacer dilatación - imagen y erosion - imagen, pero
+    % Hemos probado de hacer dilatación - imagen y erosión - imagen, pero
     % los resultados quedaban muy escalonados asi que las hemos unido.
     % Uniendolas se simplifican las imagenes y nos queda dilatacion -
     % erosion
