@@ -1,3 +1,4 @@
+% This code belongs to our classmate Cristian Comellas and his groupmates
 close all;
 
 % Options figure configuration
